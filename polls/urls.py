@@ -1,8 +1,7 @@
-from django.urls import path
 
+from django.urls import include, path
 from . import views
 
 urlpatterns = [
-    path('',views.index, name='index'),
-    path('hello/',views.polls)
+    path('',views.home_page)
 ]
