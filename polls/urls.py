@@ -6,7 +6,8 @@ from . import testdb
 urlpatterns = [
 
     path('polls/', views.index, name='index'),
-    path('polls/hello/', views.polls, name='hello'),
+    path('hello/', views.polls, name='hello'),
     path('polls/testdb/', testdb.insert),
-    path('polls/show/',testdb.show)
+    path('polls/show/',testdb.show),
+    path('testVuejsandDjango', views.testVue)
 ]
