@@ -19,7 +19,7 @@ from polls import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('polls/', views.index, name='index'),
-    path('polls/hello/', views.polls, name='hello'),
+    path('', views.home_page, name='home_page'),
+    path('', include('polls.urls')),
     path('', include('polls.urls')),
 ]

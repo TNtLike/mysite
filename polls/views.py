@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+import datetime
 
 
 def index(request):
@@ -12,5 +13,5 @@ def polls(request):
 
 def home_page(request):
     context = {}
-    context['context'] = 'hello qlc'
+    context['message'] = '{}'.format(datetime.datetime.now())
     return render(request, 'hello.html', context)
