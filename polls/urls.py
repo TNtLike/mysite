@@ -5,7 +5,7 @@ from . import testdb
 
 urlpatterns = [
 
-    path('polls/', views.index, name='index'),
+    path('', views.index, name='index'),
     path('hello/', views.polls, name='hello'),
     path('polls/testdb/', testdb.insert),
     path('polls/show/',testdb.show),

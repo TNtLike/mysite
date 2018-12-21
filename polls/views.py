@@ -21,8 +21,8 @@ def home_page(request):
 def testVue(request):
 
     data = {
-        'name': 'zhangsan',
-        'age': 18,
+        'name': 'Alex-Qiu',
+        'age': 21,
     }
     if request.method == 'GET':
         return HttpResponse(json.dumps(data), content_type="application/json")
