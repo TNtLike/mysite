@@ -6,7 +6,7 @@ new Vue({
     methods: {
         testDjango: function () {
             this.$http
-                .post('polls/testVuejsandDjango')
+                .post('http://127.0.0.1:8000/polls/testVuejsandDjango')
                 .then(function (data) {
                     console.log(data);
                 }).catch((a) => {
