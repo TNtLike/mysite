@@ -3,7 +3,7 @@ from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import datetime
 import json
-from .models import polls_model
+from . import testdb
 
 
 def index(request):
@@ -20,15 +20,25 @@ def home_page(request):
     return render(request, 'hello.html', context)
 
 
-@csrf_exempt
-def testVue(request):
-    response = '',
-    list = polls_model.objects.filter(name="Alex-LC-Qiu").order_by("id")
-    for value in list:
-        response = value.name
+def db_add(request):
+    message = testdb.insert()
+    return HttpResponse('<p>'+message+'<p>')
 
+
+def db_show(request):
+    response = testdb.show()
+    return HttpResponse('<p>'+response+'<p>')
+
+
+@csrf_exempt
+def getData(request):
+    return 0
+
+
+@csrf_exempt
+def returnData(request):
     data = {
-        'name': response,
+        'name': 'Alex-LC-Qiu',
         'age': 21,
     }
     if request.method == 'GET':
