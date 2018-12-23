@@ -25,18 +25,18 @@ def db_add(name, age, sex, tel):
     return message
 
 
-def db_show(name):
-    response = testdb.show(name)
+def db_show():
+    response = testdb.show()
     return response
 
 
 @csrf_exempt
 def getData(request):
     mess = json.loads(request.body)
-    db_add(mess['name'],mess['age'],mess['sex'],mess['tel'])
+    m = db_add(mess['name'], mess['age'], mess['sex'], mess['tel'])
 
     data = {
-        'message': 'I Get It',
+        'message': m,
     }
     if request.method == 'GET':
         return HttpResponse(json.dumps(data), content_type="application/json")
@@ -47,6 +47,8 @@ def getData(request):
 
 @csrf_exempt
 def returnData(request):
+    info = db_show
+    print(info)
     data = {
         'name': 'Alex-LC-Qiu',
         'age': 21,

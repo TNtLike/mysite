@@ -10,11 +10,11 @@ def insert(name, age, sex, tel):
     return 1
 
 
-def show(name):
+def show():
     response = '',
-    list = polls_model.objects.filter(name=name).order_by("id")
+    list = polls_model.objects.order_by("id")
     for value in list:
         response = value.name
 
     # return HttpResponse('<p>'+response+'<p>')
-    return response
+    return list
