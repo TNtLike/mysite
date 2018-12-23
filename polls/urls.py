@@ -6,9 +6,9 @@ from . import testdb
 urlpatterns = [
 
     path('', views.index, name='index'),
-    path('hello/', views.polls, name='hello'),
-    path('testdb/insert/', views.db_add),
-    path('testdb/show/', views.db_show),
+    path('hello', views.polls, name='hello'),
+    # path('testdb/insert', views.db_add),
+    # path('testdb/show', views.db_show),
     path('getData', views.getData),
-    path('returnData/', views.returnData)
+    path('returnData', views.returnData)
 ]

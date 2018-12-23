@@ -1,4 +1,5 @@
 from .models import polls_model
+from django.http import HttpResponse, JsonResponse
 
 # 数据库操作
 
@@ -12,9 +13,10 @@ def insert(name, age, sex, tel):
 
 def show():
     response = '',
-    list = polls_model.objects.order_by("id")
+    list = polls_model.objects.filter().order_by("id")
     for value in list:
         response = value.name
 
     # return HttpResponse('<p>'+response+'<p>')
+    # return HttpResponse(list)
     return list

@@ -4,6 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 import datetime
 import json
 from . import testdb
+from django.core import serializers
 
 
 def index(request):
@@ -26,8 +27,8 @@ def db_add(name, age, sex, tel):
 
 
 def db_show():
-    response = testdb.show()
-    return response
+    res = testdb.show()
+    return res
 
 
 @csrf_exempt
@@ -47,14 +48,13 @@ def getData(request):
 
 @csrf_exempt
 def returnData(request):
-    info = db_show
-    print(info)
+    info = serializers.serialize('json', db_show())
+    # return HttpResponse(info)
     data = {
-        'name': 'Alex-LC-Qiu',
-        'age': 21,
+        'message': info,
     }
     if request.method == 'GET':
         return HttpResponse(json.dumps(data), content_type="application/json")
 
     elif request.method == 'POST':
-        return HttpResponse(json.dumps(data), content_type="application/json")
+        return HttpResponse(info, content_type="application/json")
