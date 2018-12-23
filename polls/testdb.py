@@ -7,12 +7,12 @@ def insert(name, age, sex, tel):
     test1 = polls_model(name=name, age=age, sex=sex, tel=tel)
     test1.save()
     # return HttpResponse('<p>数据添加成功！</p>')
-    return '数据添加成功'
+    return 1
 
 
-def show():
+def show(name):
     response = '',
-    list = polls_model.objects.filter(name="Alex-LC-Qiu").order_by("id")
+    list = polls_model.objects.filter(name=name).order_by("id")
     for value in list:
         response = value.name
 

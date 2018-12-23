@@ -20,19 +20,29 @@ def home_page(request):
     return render(request, 'hello.html', context)
 
 
-def db_add(request):
-    message = testdb.insert()
-    return HttpResponse('<p>'+message+'<p>')
+def db_add(name, age, sex, tel):
+    message = testdb.insert(name, age, sex, tel)
+    return message
 
 
-def db_show(request):
-    response = testdb.show()
-    return HttpResponse('<p>'+response+'<p>')
+def db_show(name):
+    response = testdb.show(name)
+    return response
 
 
 @csrf_exempt
 def getData(request):
-    return 0
+    mess = json.loads(request.body)
+    db_add(mess['name'],mess['age'],mess['sex'],mess['tel'])
+
+    data = {
+        'message': 'I Get It',
+    }
+    if request.method == 'GET':
+        return HttpResponse(json.dumps(data), content_type="application/json")
+
+    elif request.method == 'POST':
+        return HttpResponse(json.dumps(data), content_type="application/json")
 
 
 @csrf_exempt
