@@ -12,7 +12,6 @@ def insert(name, age, sex, tel):
 
 
 def show():
-    response = '',
     list = polls_model.objects.filter().order_by("id")
     for value in list:
         response = value.name

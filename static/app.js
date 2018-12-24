@@ -10,6 +10,9 @@ new Vue({
         testvuejs: "at vue"
     },
     methods: {
+        test: function () {
+            alert(1)
+        },
         addData: function () {
             this.$http
                 .post('http://127.0.0.1:8000/polls/getData', {
@@ -28,7 +31,9 @@ new Vue({
             this.$http
                 .post('http://127.0.0.1:8000/polls/returnData')
                 .then(function (data) {
+                    console.log(typeof data.body)
                     console.log(data);
+                    this.testvuejs = a
                 }).catch((a) => {
                     console.log(a)
                 });
