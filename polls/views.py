@@ -54,7 +54,7 @@ def returnData(request):
         'message': info,
     }
     if request.method == 'GET':
-        return HttpResponse(json.dumps(data), content_type="application/json")
+        return HttpResponse(info, content_type="application/json")
 
     elif request.method == 'POST':
         return HttpResponse(info, content_type="application/json")
