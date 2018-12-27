@@ -1,20 +1,20 @@
 new Vue({
     el: "#vue-app-one",
     data: {
-        student: [],
+        blog: {
+            title: "",
+            author: "",
+            context: ""
+        },
         testvuejs: "at vue"
     },
     methods: {
-        test: function () {
-            alert(1)
-        },
         addData: function () {
             this.$http
                 .post('http://127.0.0.1:8000/polls/getData', {
-                    name: this.student.name,
-                    age: this.student.age,
-                    sex: this.student.sexes,
-                    tel: this.student.tel
+                    title: this.blog.title,
+                    author: this.blog.author,
+                    tel: this.blog.context
                 })
                 .then(function (data) {
                     console.log(data);

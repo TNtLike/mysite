@@ -6,7 +6,9 @@
     <title>This is Django First App</title>
 
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
     <script src="https://cdn.staticfile.org/vue-resource/1.5.1/vue-resource.min.js"></script>
+
     <link rel="stylesheet" href="../static/style.css">
 </head>
 
@@ -15,19 +17,17 @@
     <p>DateNow:{{message}}</p>
     <div id="vue-app-one">
         <form>
-            <label>姓名</label>
-            <input type="text" v-model="student.name" required>
-            <label>年龄</label>
-            <input v-model="student.age">
-            <div class="checkboxes">
-                <label>男</label>
-                <input type="checkbox" value="male" v-model="student.sexes" name="sexes">
-                <label>女</label>
-                <input type="checkbox" value="famale" v-model="student.sexes" name="sexes">
+            <div id="formItem">
+                <label>标题</label>
+                <Input v-model="blog.title" placeholder="请输入标题">
             </div>
-            <div>
-                <label>联系方式</label>
-                <input type="text" v-model="student.tel">
+            <div id="formItem">
+                <label>作者</label>
+                <Input v-model="blog.author" placeholder="请输入作者">
+            </div>
+            <div id="formItem">
+                <label>正文</label>
+                <textarea v-model="blog.context" rows="4" placeholder="Enter something..."></textarea>
             </div>
             <p v-html="testvuejs"></p>
             <button @click.prevent="addData">添加</button>

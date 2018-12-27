@@ -34,7 +34,7 @@ def db_show():
 @csrf_exempt
 def getData(request):
     mess = json.loads(request.body)
-    m = db_add(mess['name'], mess['age'], mess['sex'], mess['tel'])
+    m = db_add(mess['title'], mess['author'], mess['context'])
 
     data = {
         'message': m,
