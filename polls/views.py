@@ -49,6 +49,7 @@ def getData(request):
 @csrf_exempt
 def returnData(request):
     info = serializers.serialize('json', db_show())
+    # info =  db_show()
     # return HttpResponse(info)
     data = {
         'message': info,
