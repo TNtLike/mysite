@@ -4,8 +4,8 @@ from django.http import HttpResponse, JsonResponse
 # 数据库操作
 
 
-def insert(name, age, sex, tel):
-    test1 = polls_model(name=name, age=age, sex=sex, tel=tel)
+def insert(title, author, context):
+    test1 = polls_model(title=title, author=author, context=context)
     test1.save()
     # return HttpResponse('<p>数据添加成功！</p>')
     return 1

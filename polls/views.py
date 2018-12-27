@@ -21,8 +21,8 @@ def home_page(request):
     return render(request, 'hello.html', context)
 
 
-def db_add(name, age, sex, tel):
-    message = testdb.insert(name, age, sex, tel)
+def db_add(title, author, context):
+    message = testdb.insert(title, author, context)
     return message
 
 

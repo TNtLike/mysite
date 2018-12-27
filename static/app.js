@@ -6,6 +6,7 @@ new Vue({
             author: "",
             context: ""
         },
+        returnedBlog: [],
         testvuejs: "at vue"
     },
     methods: {
@@ -14,7 +15,7 @@ new Vue({
                 .post('http://127.0.0.1:8000/polls/getData', {
                     title: this.blog.title,
                     author: this.blog.author,
-                    tel: this.blog.context
+                    context: this.blog.context
                 })
                 .then(function (data) {
                     console.log(data);
@@ -27,9 +28,9 @@ new Vue({
                 .get('http://127.0.0.1:8000/polls/returnData')
                 .then(function (data) {
                     for (var i = 0; i < data.body.length; i++) {
-                        this.student[i] = data.body[i].fields
+                        this.returnedBlog[i] = data.body[i].fields
                     }
-                    this.testvuejs = this.student
+                    this.testvuejs = this.returnedBlog
                 }).catch((a) => {
                     console.log(a)
                 });
