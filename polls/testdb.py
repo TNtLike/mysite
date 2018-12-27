@@ -13,8 +13,6 @@ def insert(title, author, context):
 
 def show():
     list = polls_model.objects.filter().order_by("id")
-    for value in list:
-        response = value.name
 
     # return HttpResponse('<p>'+response+'<p>')
     # return HttpResponse(list)
