@@ -29,7 +29,7 @@ new Vue({
         },
         getData: function () {
             this.$http
-                .post('http://127.0.0.1:8000/polls/returnData')
+                .get('http://127.0.0.1:8000/polls/returnData')
                 .then(function (data) {
                     console.log(typeof data.body)
                     console.log(data);
