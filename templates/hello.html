@@ -19,16 +19,25 @@
         <form>
             <div id="formItem">
                 <label>标题</label>
-                <Input v-model="blog.title" placeholder="请输入标题">
+                <input v-model="blog.title" placeholder="请输入标题">
             </div>
             <div id="formItem">
                 <label>作者</label>
-                <Input v-model="blog.author" placeholder="请输入作者">
+                <input v-model="blog.author" placeholder="请输入作者">
             </div>
             <div id="formItem">
                 <label>正文</label>
                 <textarea v-model="blog.context" rows="4" placeholder="Enter something..."></textarea>
             </div>
+            {% comment %} <div id="formItem">
+                <label>类型</label>
+                <input v-model="blog.type"  placeholder="Enter something...">
+            </div> {% endcomment %}
+            <select v-model="blog.type">
+                <option value="Article">文章</option>
+                <option value="Essay">日志</option>
+                <option value="Log">随笔</option>
+            </select> 
             <p v-html="testvuejs"></p>
             <button @click.prevent="addData">添加</button>
             <button @click.prevent="getData">查询</button>

@@ -4,7 +4,8 @@ new Vue({
         blog: {
             title: "",
             author: "",
-            context: ""
+            context: "",
+            type: ""
         },
         returnedBlog: [],
         testvuejs: "at vue"
@@ -15,7 +16,8 @@ new Vue({
                 .post('http://127.0.0.1:8000/polls/getData', {
                     title: this.blog.title,
                     author: this.blog.author,
-                    context: this.blog.context
+                    context: this.blog.context,
+                    type: this.blog.type
                 })
                 .then(function (data) {
                     console.log(data);

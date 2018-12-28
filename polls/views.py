@@ -3,8 +3,8 @@ from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import datetime
 import json
-from . import testdb
 from django.core import serializers
+from .models import polls_model
 
 
 def index(request):
@@ -21,20 +21,28 @@ def home_page(request):
     return render(request, 'hello.html', context)
 
 
-def db_add(title, author, context):
-    message = testdb.insert(title, author, context)
-    return message
+# 数据库操作
 
 
-def db_show():
-    res = testdb.show()
-    return res
+def insert(title, author, context, type):
+    test1 = polls_model(title=title, author=author, context=context, type=type)
+    test1.save()
+    # return HttpResponse('<p>数据添加成功！</p>')
+    return 1
+
+
+def show():
+    list = polls_model.objects.filter().order_by("id")
+
+    # return HttpResponse('<p>'+response+'<p>')
+    # return HttpResponse(list)
+    return list
 
 
 @csrf_exempt
 def getData(request):
     mess = json.loads(request.body)
-    m = db_add(mess['title'], mess['author'], mess['context'])
+    m = insert(mess['title'], mess['author'], mess['context'], mess['type'])
 
     data = {
         'message': m,
@@ -48,7 +56,7 @@ def getData(request):
 
 @csrf_exempt
 def returnData(request):
-    info = serializers.serialize('json', db_show())
+    info = serializers.serialize('json', show())
     # info =  db_show()
     # return HttpResponse(info)
     data = {

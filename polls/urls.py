@@ -1,7 +1,6 @@
 
 from django.urls import include, path
 from . import views
-from . import testdb
 # ../polls/+
 urlpatterns = [
 
