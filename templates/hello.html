@@ -29,10 +29,6 @@
                 <label>正文</label>
                 <textarea v-model="blog.context" rows="4" placeholder="Enter something..."></textarea>
             </div>
-            {% comment %} <div id="formItem">
-                <label>类型</label>
-                <input v-model="blog.type"  placeholder="Enter something...">
-            </div> {% endcomment %}
             <select v-model="blog.type">
                 <option value="Article">文章</option>
                 <option value="Essay">日志</option>
