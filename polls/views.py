@@ -24,8 +24,8 @@ def home_page(request):
 # 数据库操作
 
 
-def insert(title, author, context, type):
-    test1 = polls_model(title=title, author=author, context=context, type=type)
+def insert(title, author, content, type):
+    test1 = polls_model(title=title, author=author, content=content, type=type)
     test1.save()
     # return HttpResponse('<p>数据添加成功！</p>')
     return 1
@@ -42,7 +42,7 @@ def show():
 @csrf_exempt
 def getData(request):
     mess = json.loads(request.body)
-    m = insert(mess['title'], mess['author'], mess['context'], mess['type'])
+    m = insert(mess['title'], mess['author'], mess['content'], mess['type'])
 
     data = {
         'message': m,
