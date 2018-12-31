@@ -9,5 +9,6 @@ urlpatterns = [
     # path('testdb/insert', views.db_add),
     # path('testdb/show', views.db_show),
     path('getData', views.getData),
-    path('returnData', views.returnData)
+    path('returnData', views.returnData),
+    path('returnSingleData', views.returnSingleData)
 ]

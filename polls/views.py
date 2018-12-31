@@ -39,6 +39,14 @@ def show():
     return list
 
 
+def query(id):
+    list = polls_model.objects.filter(id=id).order_by("id")
+
+    # return HttpResponse('<p>'+response+'<p>')
+    # return HttpResponse(list)
+    return list
+
+
 @csrf_exempt
 def getData(request):
     mess = json.loads(request.body)
@@ -52,6 +60,21 @@ def getData(request):
 
     elif request.method == 'POST':
         return HttpResponse(json.dumps(data), content_type="application/json")
+
+
+@csrf_exempt
+def returnSingleData(request):
+    id = json.loads(request.body)
+    info = serializers.serialize('json', query(id['id']))
+
+    data = {
+        'message': info,
+    }
+    if request.method == 'GET':
+        return HttpResponse(info, content_type="application/json")
+
+    elif request.method == 'POST':
+        return HttpResponse(info, content_type="application/json")
 
 
 @csrf_exempt
