@@ -7,14 +7,6 @@ from django.core import serializers
 from .models import polls_model
 
 
-def index(request):
-    return HttpResponse("Hello, world. You're at the polls index.")
-
-
-def polls(request):
-    return HttpResponse("Hello, Django. My name is Alex Qiu.")
-
-
 def home_page(request):
     context = {}
     context['message'] = '{}'.format(datetime.datetime.now())
@@ -32,7 +24,7 @@ def insert(title, author, content, type):
 
 
 def show():
-    list = polls_model.objects.filter().order_by("id")
+    list = polls_model.objects.filter().order_by('id')
 
     # return HttpResponse('<p>'+response+'<p>')
     # return HttpResponse(list)
@@ -40,11 +32,19 @@ def show():
 
 
 def query(id):
-    list = polls_model.objects.filter(id=id).order_by("id")
+    list = polls_model.objects.filter(id=id).order_by('id')
 
     # return HttpResponse('<p>'+response+'<p>')
     # return HttpResponse(list)
     return list
+
+
+def delete(id):
+    list = polls_model.object.filter(id=id).order_by('id')
+    if list.delete():
+        return 1
+    else:
+        return 2
 
 
 @csrf_exempt
@@ -54,6 +54,24 @@ def getData(request):
 
     data = {
         'message': m,
+    }
+    if request.method == 'GET':
+        return HttpResponse(json.dumps(data), content_type="application/json")
+
+    elif request.method == 'POST':
+        return HttpResponse(json.dumps(data), content_type="application/json")
+
+
+@csrf_exempt
+def deleteData(request):
+    id = json.loads(request.body)
+    m = delete(id['id'])
+    if m == 1:
+        mess = 'success deleted'
+    else:
+        mess = 'failed deleted'
+    data = {
+        'message': mess,
     }
     if request.method == 'GET':
         return HttpResponse(json.dumps(data), content_type="application/json")
