@@ -40,7 +40,7 @@ def query(id):
 
 
 def delete(id):
-    list = polls_model.object.filter(id=id).order_by('id')
+    list = polls_model.object.filter(id=id)
     if list.delete():
         return 1
     else:
