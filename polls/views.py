@@ -5,6 +5,7 @@ import datetime
 import json
 from django.core import serializers
 from .models import polls_model
+from .models import user
 
 
 def home_page(request):
@@ -108,3 +109,23 @@ def returnData(request):
 
     elif request.method == 'POST':
         return HttpResponse(info, content_type="application/json")
+
+
+@csrf_exempt
+def submitUser(request):
+    message = json.loads(request.body)
+    print(message)
+    test1 = user(username=message['username'], password=message['password'],
+                 question=message['question'], answer=message['answer'], email=message['email'],)
+    if test1.save():
+        info = 'failed'
+    else:
+        info = 'success'
+    data = {
+        'message': info,
+    }
+    if request.method == 'GET':
+        return HttpResponse(json.dumps(data), content_type="application/json")
+
+    elif request.method == 'POST':
+        return HttpResponse(json.dumps(data), content_type="application/json")
