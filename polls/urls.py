@@ -8,4 +8,5 @@ urlpatterns = [
     path('returnSingleData', views.returnSingleData),
     path('deleteData', views.deleteData),
     path('submitUser', views.submitUser),
+    path('login', views.login),
 ]

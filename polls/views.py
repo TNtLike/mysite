@@ -110,6 +110,8 @@ def returnData(request):
     elif request.method == 'POST':
         return HttpResponse(info, content_type="application/json")
 
+# 注册
+
 
 @csrf_exempt
 def submitUser(request):
@@ -129,3 +131,17 @@ def submitUser(request):
 
     elif request.method == 'POST':
         return HttpResponse(json.dumps(data), content_type="application/json")
+
+
+# 登录
+@csrf_exempt
+def login(request):
+    message = json.loads(request.body)
+    print(message['username'])
+    try:
+        m = user.objects.get(username=message['username'])
+        if m.password == message['password']:
+            request.session['username'] = m.username
+            return HttpResponse('/you-are-logged-in/')
+    except user.DoesNotExist:
+        return HttpResponse("Your username and password didn't match.")
