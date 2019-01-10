@@ -138,10 +138,15 @@ def submitUser(request):
 def login(request):
     message = json.loads(request.body)
     print(message['username'])
+    info = 0
     try:
         m = user.objects.get(username=message['username'])
         if m.password == message['password']:
             request.session['username'] = m.username
-            return HttpResponse('/you-are-logged-in/')
+            info = 1
     except user.DoesNotExist:
-        return HttpResponse("Your username and password didn't match.")
+        info = 2
+    data = {
+        'message': info,
+    }
+    return HttpResponse(json.dumps(data), content_type="application/json")
