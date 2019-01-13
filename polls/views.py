@@ -11,7 +11,7 @@ from .models import user
 def home_page(request):
     context = {}
     context['message'] = '{}'.format(datetime.datetime.now())
-    return render(request, 'hello.html', context)
+    return render(request, 'index.html', context)
 
 
 # 数据库操作
@@ -137,7 +137,24 @@ def submitUser(request):
 @csrf_exempt
 def login(request):
     message = json.loads(request.body)
-    print(message['username'])
+    info = 0
+    try:
+        m = user.objects.get(username=message['username'])
+        if m.password == message['password']:
+            request.session['username'] = m.username
+            info = 1
+    except user.DoesNotExist:
+        info = 2
+    data = {
+        'message': info,
+    }
+    return HttpResponse(json.dumps(data), content_type="application/json")
+
+
+# 测试
+@csrf_exempt
+def test(request):
+    message = request.POST
     info = 0
     try:
         m = user.objects.get(username=message['username'])
