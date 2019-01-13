@@ -14,6 +14,12 @@ def home_page(request):
     return render(request, 'index.html', context)
 
 
+def hello(request):
+    context = {}
+    context['message'] = '{}'.format(datetime.datetime.now())
+    return render(request, 'hello.html', context)
+
+
 # 数据库操作
 
 
