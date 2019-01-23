@@ -144,15 +144,18 @@ def submitUser(request):
 def login(request):
     message = json.loads(request.body)
     info = 0
+    username = ''
     try:
         m = user.objects.get(username=message['username'])
         if m.password == message['password']:
-            request.session['username'] = m.username
+            # request.session['username'] = m.username
             info = 1
+            username = m.username
     except user.DoesNotExist:
         info = 2
     data = {
         'message': info,
+        'username': username
     }
     return HttpResponse(json.dumps(data), content_type="application/json")
 
@@ -161,15 +164,51 @@ def login(request):
 @csrf_exempt
 def test(request):
     message = request.POST
-    info = 0
-    try:
-        m = user.objects.get(username=message['username'])
-        if m.password == message['password']:
-            request.session['username'] = m.username
-            info = 1
-    except user.DoesNotExist:
-        info = 2
+    if message['action'] == 'reg':
+        if message['type'] == 'person':
+            msg = 'Success register as a person'
+            state = 'Success'
+        elif message['type'] == 'enterprise':
+            msg = 'Success register as a enterprise'
+            state = 'Success'
+        else:
+            state = "Error"
+            msg = 'error'
+    if message['action'] == 'login':
+        if message['type'] == 'person':
+            msg = 'Success login as person'
+            state = 'Success'
+        elif message['type'] == 'enterprise':
+            msg = 'Success login as enterprise'
+            state = 'Success'
+        else:
+            state = "Error"
+            msg = 'error'
+    if message['action'] == 'signup':
+        if message['type'] == 'person':
+            msg = 'Success sign up as person'
+            state = 'Success'
+        elif message['type'] == 'enterprise':
+            msg = 'Success sign up  as enterprise'
+            state = 'Success'
+        else:
+            state = "Error"
+            msg = 'error'
+    if message['action'] == 'getPwd':
+        print(message)
+        if message['type'] == 'person':
+            msg = 'Get password as person'
+            state = 'Success'
+        elif message['type'] == 'enterprise':
+            msg = 'Get password  as enterprise'
+            state = 'Success'
+        else:
+            state = "Error"
+            msg = 'error'
     data = {
-        'message': info,
+        'state': state,
+        'message': {
+            'msg': msg
+        },
     }
     return HttpResponse(json.dumps(data), content_type="application/json")
