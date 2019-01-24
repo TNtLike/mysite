@@ -38,4 +38,4 @@ class enterprise_jobs(models.Model):
     jobsName = models.CharField(max_length=20)
     jobsCodition = models.CharField(max_length=30)
     jobsLocation = models.CharField(max_length=30)
-    jobsPay = models.IntField()
+    jobsPay = models.CharField(max_length=30)
