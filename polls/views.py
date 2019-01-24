@@ -67,52 +67,71 @@ def login(request):
 # 测试
 @csrf_exempt
 def test(request):
-    message = request.POST
-    if message['action'] == 'reg':
-        if message['type'] == 'person':
-            msg = 'Success register as a person'
-            state = 'Success'
-        elif message['type'] == 'enterprise':
-            msg = 'Success register as a enterprise'
-            state = 'Success'
-        else:
-            state = "Error"
-            msg = 'error'
-    if message['action'] == 'login':
-        if message['type'] == 'person':
-            msg = 'Success login as person'
-            state = 'Success'
-        elif message['type'] == 'enterprise':
-            msg = 'Success login as enterprise'
-            state = 'Success'
-        else:
-            state = "Error"
-            msg = 'error'
-    if message['action'] == 'signup':
-        if message['type'] == 'person':
-            msg = 'Success sign up as person'
-            state = 'Success'
-        elif message['type'] == 'enterprise':
-            msg = 'Success sign up  as enterprise'
-            state = 'Success'
-        else:
-            state = "Error"
-            msg = 'error'
-    if message['action'] == 'getPwd':
+
+    if request.method == 'GET':
+        data = {
+            'personBaseInfo': {
+                'name': '王小明',
+                'sex': '男',
+                'loca': '宁波',
+                'workYear': '1',
+                'email': '987073656@qq.com',
+                'tel': '13252466597',
+            }
+        }
+    elif request.method == 'POST':
+        message = request.POST
         print(message)
-        if message['type'] == 'person':
-            msg = 'Get password as person'
-            state = 'Success'
-        elif message['type'] == 'enterprise':
-            msg = 'Get password  as enterprise'
-            state = 'Success'
-        else:
-            state = "Error"
-            msg = 'error'
-    data = {
-        'state': state,
-        'message': {
-            'msg': msg
-        },
-    }
+        data = {
+            'msg': 1
+        }
     return HttpResponse(json.dumps(data), content_type="application/json")
+    # if message = request.POST:
+    # if message['action'] == 'reg':
+    #     if message['type'] == 'person':
+    #         msg = 'Success register as a person'
+    #         state = 'Success'
+    #     elif message['type'] == 'enterprise':
+    #         msg = 'Success register as a enterprise'
+    #         state = 'Success'
+    #     else:
+    #         state = "Error"
+    #         msg = 'error'
+    # if message['action'] == 'login':
+    #     if message['type'] == 'person':
+    #         msg = 'Success login as person'
+    #         state = 'Success'
+    #     elif message['type'] == 'enterprise':
+    #         msg = 'Success login as enterprise'
+    #         state = 'Success'
+    #     else:
+    #         state = "Error"
+    #         msg = 'error'
+    # if message['action'] == 'signup':
+    #     if message['type'] == 'person':
+    #         msg = 'Success sign up as person'
+    #         state = 'Success'
+    #     elif message['type'] == 'enterprise':
+    #         msg = 'Success sign up  as enterprise'
+    #         state = 'Success'
+    #     else:
+    #         state = "Error"
+    #         msg = 'error'
+    # if message['action'] == 'getPwd':
+    #     print(message)
+    #     if message['type'] == 'person':
+    #         msg = 'Get password as person'
+    #         state = 'Success'
+    #     elif message['type'] == 'enterprise':
+    #         msg = 'Get password  as enterprise'
+    #         state = 'Success'
+    #     else:
+    #         state = "Error"
+    #         msg = 'error'
+    # data = {
+    #     'state': state,
+    #     'message': {
+    #         'msg': msg
+    #     },
+    # }
+    # return HttpResponse(json.dumps(data), content_type="application/json")
