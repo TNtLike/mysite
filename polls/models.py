@@ -3,7 +3,7 @@ from django.db import models
 # Create your models here.
 
 
-class user(models.Model):
+class person(models.Model):
     id = models.AutoField(primary_key=True)
     username = models.CharField(max_length=20)
     password = models.CharField(max_length=20)
@@ -12,9 +12,30 @@ class user(models.Model):
     email = models.CharField(max_length=20)
 
 
-class polls_model(models.Model):
+class person_resume(models.Model):
+    relName = models.AutoField(primary_key=True)
+    gender = models.CharField(max_length=20)
+    location = models.CharField(max_length=20)
+    nowJobs = models.CharField(max_length=20)
+    nowPay = models.CharField(max_length=20)
+    personIntroduction = models.TextField()
+
+
+class enterprise(models.Model):
     id = models.AutoField(primary_key=True)
-    title = models.CharField(max_length=20)
-    author = models.CharField(max_length=20)
-    content = models.TextField()
-    type = models.CharField(max_length=20)
+    username = models.CharField(max_length=20)
+    password = models.CharField(max_length=20)
+    question = models.CharField(max_length=20)
+    answer = models.CharField(max_length=20)
+    enterpriseemail = models.CharField(max_length=20)
+    enterpriseName = models.CharField(max_length=50)
+    enterpriseNumber = models.CharField(max_length=50)
+    enterpriseIntroduction = models.TextField()
+
+
+class enterprise_jobs(models.Model):
+    enterpriseName = models.CharField(max_length=50)
+    jobsName = models.CharField(max_length=20)
+    jobsCodition = models.CharField(max_length=30)
+    jobsLocation = models.CharField(max_length=30)
+    jobsPay = models.IntField()
