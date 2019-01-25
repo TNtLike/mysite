@@ -67,23 +67,101 @@ def login(request):
 # 测试
 @csrf_exempt
 def test(request):
+    worksInfo = [{
+        'companyName': "宁波智士网络科技有限公司",
+        'industry': "计算机软件",
+        'department': "开发部门",
+        'position': "前端开发工程师",
+        'description': "11111111111111111111",
+    }]
+    edusInfo = [{
+        'school': "长春工程学院",
+        'major': "计算机科学与技术",
+        'degree': "本科",
+        'gradTime': "2019",
+    }]
+    projectsInfo = [{
+        'projectname': "网站",
+        'org': "宁波智士网络科技有限公司",
+        'position': "开发部门",
+        'description': "前端开发",
+        'duty': "开发",
+    }]
+    skillsInfo = [{
+        'skillName': "英语",
+        'proficiency': "精通",
+        'skillType': "语言",
+    }]
+    othersInfo = [{
+        'content': "ACM",
+    }]
 
     if request.method == 'GET':
         data = {
-            'personBaseInfo': {
+            'personInfo': {
                 'name': '王小明',
                 'sex': '男',
                 'loca': '宁波',
-                'workYear': '1',
+                'workYear': '2015-02',
                 'email': '987073656@qq.com',
                 'tel': '13252466597',
-            }
+            },
+            'baseInfo': {
+                'loca': '宁波',
+                'workState': '离职',
+                'birth': '1997-01',
+                'marriage': '未婚'
+            },
+            'jobIntentInfo': {
+                'pay': 100,
+                'loca': '宁波',
+                'industry': '计算机信息技术',
+                'function': 'web前端开发',
+                'arrTime': '一月内',
+                'introduction': 'onsljlzlmklamscopmasa;lsmdl;asojkdapoksd;lmsdoajsdioansaloimspo'
+            },
+            'worksInfo': worksInfo,
+            'edusInfo': edusInfo,
+            'projectsInfo': projectsInfo,
+            'skillsInfo': skillsInfo,
+            'othersInfo': othersInfo,
         }
     elif request.method == 'POST':
+
         message = request.POST
         print(message)
+        if message['action'] == 'add_workInfo':
+            b = eval(message.get('data'))
+            worksInfo.append(b)
         data = {
-            'msg': 1
+            'state': 1,
+            'personInfo': {
+                'name': '王小明',
+                'sex': '男',
+                'loca': '宁波',
+                'workYear': '2015-02',
+                'email': '987073656@qq.com',
+                'tel': '13252466597',
+            },
+            'baseInfo': {
+                'loca': '宁波',
+                'workState': '离职',
+                'birth': '1997-01',
+                'marriage': '未婚'
+            },
+            'jobIntentInfo': {
+                'pay': 100,
+                'loca': '宁波',
+                'industry': '计算机信息技术',
+                'function': 'web前端开发',
+                'arrTime': '一月内',
+                'introduction': 'onsljlzlmklamscopmasa;lsmdl;asojkdapoksd;lmsdoajsdioansaloimspo'
+            },
+            'worksInfo': worksInfo,
+            'edusInfo': edusInfo,
+            'projectsInfo': projectsInfo,
+            'skillsInfo': skillsInfo,
+            'othersInfo': othersInfo,
         }
     return HttpResponse(json.dumps(data), content_type="application/json")
     # if message = request.POST:
