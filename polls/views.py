@@ -95,75 +95,75 @@ def test(request):
     othersInfo = [{
         'content': "ACM",
     }]
+    personInfo = {
+        'name': '王小明',
+        'sex': '男',
+        'loca': '宁波',
+        'workYear': '2015-02',
+        'email': '987073656@qq.com',
+        'tel': '13252466597',
+
+    }
+    baseInfo = {
+        'loca': '宁波',
+        'workState': '离职',
+        'birth': '1997-01',
+        'marriage': '未婚'
+    }
+    jobIntentInfo = {
+        'pay': '100',
+        'loca': '宁波',
+        'industry': '计算机信息技术',
+        'function': 'web前端开发',
+        'arrTime': '一月内',
+        'introduction': 'onsljlzlmklamscopmasa;lsmdl;asojkdapoksd;lmsdoajsdioansaloimspo'
+    }
 
     if request.method == 'GET':
         data = {
-            'personInfo': {
-                'name': '王小明',
-                'sex': '男',
-                'loca': '宁波',
-                'workYear': '2015-02',
-                'email': '987073656@qq.com',
-                'tel': '13252466597',
-            },
-            'baseInfo': {
-                'loca': '宁波',
-                'workState': '离职',
-                'birth': '1997-01',
-                'marriage': '未婚'
-            },
-            'jobIntentInfo': {
-                'pay': 100,
-                'loca': '宁波',
-                'industry': '计算机信息技术',
-                'function': 'web前端开发',
-                'arrTime': '一月内',
-                'introduction': 'onsljlzlmklamscopmasa;lsmdl;asojkdapoksd;lmsdoajsdioansaloimspo'
-            },
+            'personInfo': personInfo,
+            'baseInfo': baseInfo,
+            'jobIntentInfo': jobIntentInfo,
             'worksInfo': worksInfo,
             'edusInfo': edusInfo,
             'projectsInfo': projectsInfo,
             'skillsInfo': skillsInfo,
             'othersInfo': othersInfo,
         }
+        
+        return HttpResponse(json.dumps(data), content_type="application/json")
     elif request.method == 'POST':
 
         message = request.POST
         print(message)
-        if message['action'] == 'add_workInfo':
-            b = eval(message.get('data'))
-            worksInfo.append(b)
-        data = {
-            'state': 1,
-            'personInfo': {
-                'name': '王小明',
-                'sex': '男',
-                'loca': '宁波',
-                'workYear': '2015-02',
-                'email': '987073656@qq.com',
-                'tel': '13252466597',
-            },
-            'baseInfo': {
-                'loca': '宁波',
-                'workState': '离职',
-                'birth': '1997-01',
-                'marriage': '未婚'
-            },
-            'jobIntentInfo': {
-                'pay': 100,
-                'loca': '宁波',
-                'industry': '计算机信息技术',
-                'function': 'web前端开发',
-                'arrTime': '一月内',
-                'introduction': 'onsljlzlmklamscopmasa;lsmdl;asojkdapoksd;lmsdoajsdioansaloimspo'
-            },
+        action = message['action']
+        d = message['data']
+        if action == 'edit_personInfo':
+            personInfo=eval(d)
+        elif action == 'edit_baseInfo':
+            baseInfo=eval(d)
+        elif action == 'edit_jobIntentInfo':
+            jobIntentInfo=eval(d)
+        elif message['action'] == 'add_workInfo':
+            worksInfo.append(eval(d))
+            print(worksInfo)
+        elif message['action'] == 'del_workInfo':
+            print(eval(d))
+            
+            print(worksInfo)
+            # worksInfo.pop(eval(d))
+        data2 = {
+            'msg': 1,
+            'personInfo': personInfo,
+            'baseInfo': baseInfo,
+            'jobIntentInfo': jobIntentInfo,
             'worksInfo': worksInfo,
             'edusInfo': edusInfo,
             'projectsInfo': projectsInfo,
             'skillsInfo': skillsInfo,
             'othersInfo': othersInfo,
         }
-    return HttpResponse(json.dumps(data), content_type="application/json")
+        return HttpResponse(json.dumps(data2), content_type="application/json")
     # if message = request.POST:
     # if message['action'] == 'reg':
     #     if message['type'] == 'person':
