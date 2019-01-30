@@ -95,16 +95,17 @@ def test(request):
     othersInfo = [{
         'content': "ACM",
     }]
-    personInfo = {
+    baseInfo = {
         'name': '王小明',
         'sex': '男',
-        'loca': '宁波',
-        'workYear': '2015-02',
-        'email': '987073656@qq.com',
-        'tel': '13252466597',
-
+        'location': '宁波',
+        'industry': '计算机软件',
+        'function': 'web全栈开发',
+        'position': '前端开发',
+        'companyName': '宁波智士网络科技有限公司',
+        'startWork': '2015年'
     }
-    baseInfo = {
+    personInfo = {
         'loca': '宁波',
         'workState': '离职',
         'birth': '1997-01',
@@ -130,7 +131,7 @@ def test(request):
             'skillsInfo': skillsInfo,
             'othersInfo': othersInfo,
         }
-        
+
         return HttpResponse(json.dumps(data), content_type="application/json")
     elif request.method == 'POST':
 
@@ -139,17 +140,17 @@ def test(request):
         action = message['action']
         d = message['data']
         if action == 'edit_personInfo':
-            personInfo=eval(d)
+            personInfo = eval(d)
         elif action == 'edit_baseInfo':
-            baseInfo=eval(d)
+            baseInfo = eval(d)
         elif action == 'edit_jobIntentInfo':
-            jobIntentInfo=eval(d)
+            jobIntentInfo = eval(d)
         elif message['action'] == 'add_workInfo':
             worksInfo.append(eval(d))
             print(worksInfo)
         elif message['action'] == 'del_workInfo':
             print(eval(d))
-            
+
             print(worksInfo)
             # worksInfo.pop(eval(d))
         data2 = {
@@ -164,52 +165,4 @@ def test(request):
             'othersInfo': othersInfo,
         }
         return HttpResponse(json.dumps(data2), content_type="application/json")
-    # if message = request.POST:
-    # if message['action'] == 'reg':
-    #     if message['type'] == 'person':
-    #         msg = 'Success register as a person'
-    #         state = 'Success'
-    #     elif message['type'] == 'enterprise':
-    #         msg = 'Success register as a enterprise'
-    #         state = 'Success'
-    #     else:
-    #         state = "Error"
-    #         msg = 'error'
-    # if message['action'] == 'login':
-    #     if message['type'] == 'person':
-    #         msg = 'Success login as person'
-    #         state = 'Success'
-    #     elif message['type'] == 'enterprise':
-    #         msg = 'Success login as enterprise'
-    #         state = 'Success'
-    #     else:
-    #         state = "Error"
-    #         msg = 'error'
-    # if message['action'] == 'signup':
-    #     if message['type'] == 'person':
-    #         msg = 'Success sign up as person'
-    #         state = 'Success'
-    #     elif message['type'] == 'enterprise':
-    #         msg = 'Success sign up  as enterprise'
-    #         state = 'Success'
-    #     else:
-    #         state = "Error"
-    #         msg = 'error'
-    # if message['action'] == 'getPwd':
-    #     print(message)
-    #     if message['type'] == 'person':
-    #         msg = 'Get password as person'
-    #         state = 'Success'
-    #     elif message['type'] == 'enterprise':
-    #         msg = 'Get password  as enterprise'
-    #         state = 'Success'
-    #     else:
-    #         state = "Error"
-    #         msg = 'error'
-    # data = {
-    #     'state': state,
-    #     'message': {
-    #         'msg': msg
-    #     },
-    # }
-    # return HttpResponse(json.dumps(data), content_type="application/json")
+
