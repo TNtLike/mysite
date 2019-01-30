@@ -70,8 +70,12 @@ def test(request):
     worksInfo = [{
         'companyName': "宁波智士网络科技有限公司",
         'industry': "计算机软件",
+        'location': "宁波",
+        'startTime': "2015-01-02",
+        'endTime': "2019-01-02",
         'department': "开发部门",
         'position': "前端开发工程师",
+        'pay': '122222',
         'description': "11111111111111111111",
     }]
     edusInfo = [{
@@ -88,9 +92,12 @@ def test(request):
         'duty': "开发",
     }]
     skillsInfo = [{
-        'skillName': "英语",
+        'skillName': "铸造工艺",
         'proficiency': "精通",
-        'skillType': "语言",
+    }]
+    langsInfo = [{
+        'type': "英语",
+        'proficiency': "简单沟通",
     }]
     othersInfo = [{
         'content': "ACM",
@@ -106,17 +113,17 @@ def test(request):
         'startWork': '2015年'
     }
     personInfo = {
-        'loca': '宁波',
+        'location': '宁波',
         'workState': '离职',
         'birth': '1997-01',
         'marriage': '未婚'
     }
     jobIntentInfo = {
-        'pay': '100',
-        'loca': '宁波',
+        'pay': '面议',
+        'location': '宁波',
         'industry': '计算机信息技术',
         'function': 'web前端开发',
-        'arrTime': '一月内',
+        'type': '全职',
         'introduction': 'onsljlzlmklamscopmasa;lsmdl;asojkdapoksd;lmsdoajsdioansaloimspo'
     }
 
@@ -129,6 +136,7 @@ def test(request):
             'edusInfo': edusInfo,
             'projectsInfo': projectsInfo,
             'skillsInfo': skillsInfo,
+            'langsInfo': langsInfo,
             'othersInfo': othersInfo,
         }
 
@@ -145,16 +153,27 @@ def test(request):
             baseInfo = eval(d)
         elif action == 'edit_jobIntentInfo':
             jobIntentInfo = eval(d)
+        elif message['action'] == 'add_skillInfo':
+            skillsInfo.append(eval(d))
+            print(skillsInfo)
+        elif message['action'] == 'add_langInfo':
+            langsInfo.append(eval(d))
+            print(langsInfo)
         elif message['action'] == 'add_workInfo':
             worksInfo.append(eval(d))
             print(worksInfo)
+
+        elif message['action'] == 'edit_workInfo':
+            print(eval(d))
+            index = eval(message['index'])
+            worksInfo[index] = eval(d)
         elif message['action'] == 'del_workInfo':
             print(eval(d))
 
             print(worksInfo)
             # worksInfo.pop(eval(d))
         data2 = {
-            'msg': 1,
+            'msg': 'success',
             'personInfo': personInfo,
             'baseInfo': baseInfo,
             'jobIntentInfo': jobIntentInfo,
@@ -162,7 +181,7 @@ def test(request):
             'edusInfo': edusInfo,
             'projectsInfo': projectsInfo,
             'skillsInfo': skillsInfo,
+            'langsInfo': langsInfo,
             'othersInfo': othersInfo,
         }
         return HttpResponse(json.dumps(data2), content_type="application/json")
-
