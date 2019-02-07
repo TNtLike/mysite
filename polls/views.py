@@ -83,6 +83,8 @@ def test(request):
         'major': "计算机科学与技术",
         'degree': "本科",
         'gradTime': "2019",
+        'transfer': True,
+        'overseas': False,
     }]
     projectsInfo = [{
         'projectname': "网站",
@@ -163,17 +165,29 @@ def test(request):
             worksInfo.append(eval(d))
             print(worksInfo)
 
+        elif message['action'] == 'add_eduInfo':
+            edusInfo.append(eval(d))
+            print(edusInfo)
+
         elif message['action'] == 'edit_workInfo':
             print(eval(d))
             index = eval(message['index'])
             worksInfo[index] = eval(d)
+        elif message['action'] == 'edit_eduInfo':
+            print(d)
+            # index = eval(message['index'])
+            # edusInfo[index] = eval(d)
+        elif message['action'] == 'edit_skillInfo':
+            print(eval(d))
+            index = eval(message['index'])
+            skillsInfo[index] = eval(d)
         elif message['action'] == 'del_workInfo':
             print(eval(d))
 
             print(worksInfo)
             # worksInfo.pop(eval(d))
         data2 = {
-            'msg': 'success',
+            'state': 'success',
             'personInfo': personInfo,
             'baseInfo': baseInfo,
             'jobIntentInfo': jobIntentInfo,
