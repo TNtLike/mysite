@@ -21,6 +21,17 @@ class person_resume(models.Model):
     personIntroduction = models.TextField()
 
 
+class person_baseInfo(models.Model):
+    name = models.CharField(max_length=20)
+    sex = models.CharField(max_length=20)
+    location = models.CharField(max_length=20)
+    industry = models.CharField(max_length=20)
+    function = models.CharField(max_length=20)
+    position = models.CharField(max_length=20)
+    companyName = models.CharField(max_length=20)
+    startWork = models.CharField(max_length=20)
+
+
 class enterprise(models.Model):
     id = models.AutoField(primary_key=True)
     username = models.CharField(max_length=20)

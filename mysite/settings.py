@@ -85,11 +85,15 @@ DATABASES = {
     # }
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'polls',
+        'NAME': 'tests',
         'USER': 'root',
         'PASSWORD': '123456789',
         'HOST': 'localhost',
         'PORT': '3306',
+        'TEST': {
+                'CHARSET': 'utf8',
+                'COLLATION': 'utf8_general_ci',
+        }
     }
 }
 

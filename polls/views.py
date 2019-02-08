@@ -8,6 +8,7 @@ from .models import person
 from .models import person_resume
 from .models import enterprise
 from .models import enterprise_jobs
+from .models import person_baseInfo
 
 
 def home_page(request):
@@ -52,7 +53,9 @@ def login(request):
     try:
         m = person.objects.get(username=message['username'])
         if m.password == message['password']:
-            # request.session['username'] = m.username
+            request.session['isLogin'] = True
+            request.session['username'] = m.username
+            request.session['userId'] = m.id
             info = 1
             username = m.username
     except person.DoesNotExist:
@@ -112,7 +115,7 @@ def test(request):
         'function': 'web全栈开发',
         'position': '前端开发',
         'companyName': '宁波智士网络科技有限公司',
-        'startWork': '2015年'
+        'startWork': '2015'
     }
     personInfo = {
         'location': '宁波',
@@ -152,7 +155,10 @@ def test(request):
         if action == 'edit_personInfo':
             personInfo = eval(d)
         elif action == 'edit_baseInfo':
-            baseInfo = eval(d)
+            edit_baseInfo = person_baseInfo(name=eval(d)['name'], sex=eval(d)['sex'],
+                                            location=eval(d)['location'], industry=eval(d)['industry'], function=eval(d)['function'], companyName=eval(d)['companyName'], startWork=eval(d)['startWork'])
+            edit_baseInfo.save()
+            # baseInfo = eval(d)
         elif action == 'edit_jobIntentInfo':
             jobIntentInfo = eval(d)
         elif message['action'] == 'add_skillInfo':
@@ -185,7 +191,7 @@ def test(request):
             print(eval(d))
 
             print(worksInfo)
-            # worksInfo.pop(eval(d))
+            worksInfo.pop(eval(d))
         data2 = {
             'state': 'success',
             'personInfo': personInfo,
