@@ -74,8 +74,7 @@ def test(request):
         'companyName': "宁波智士网络科技有限公司",
         'industry': "计算机软件",
         'location': "宁波",
-        'startTime': "2015-01-02",
-        'endTime': "2019-01-02",
+        'workTime': "2019-02 - 2019-03",
         'department': "开发部门",
         'position': "前端开发工程师",
         'pay': '122222',
@@ -90,9 +89,9 @@ def test(request):
         'overseas': False,
     }]
     projectsInfo = [{
-        'projectname': "网站",
-        'org': "宁波智士网络科技有限公司",
-        'position': "开发部门",
+        'projectName': "网站",
+        'projectTime': "2018-02 - 2018-03",
+        'score': "qwefdwdf",
         'description': "前端开发",
         'duty': "开发",
     }]
@@ -126,13 +125,14 @@ def test(request):
     jobIntentInfo = {
         'pay': '面议',
         'location': '宁波',
-        'industry': '计算机信息技术',
+        'industry': '其他',
         'function': 'web前端开发',
         'type': '全职',
-        'introduction': 'onsljlzlmklamscopmasa;lsmdl;asojkdapoksd;lmsdoajsdioansaloimspo'
+        'introduction': 'ofaefaafamadsmalsmdalkmsdlqwodqpwoekpoqwkepoqkweqpwoekqpwosefspmfslkmcvxlmlkmekpqowkeqwpokokznsljlzlmklamscopmasa;lsmdl;asojkdapoksd;lmsdoajsdioansaloimspo'
     }
 
     if request.method == 'GET':
+        print(person_baseInfo.objects.get(id=1).name)
         data = {
             'personInfo': personInfo,
             'baseInfo': baseInfo,
@@ -156,9 +156,9 @@ def test(request):
             personInfo = eval(d)
         elif action == 'edit_baseInfo':
             edit_baseInfo = person_baseInfo(name=eval(d)['name'], sex=eval(d)['sex'],
-                                            location=eval(d)['location'], industry=eval(d)['industry'], function=eval(d)['function'], companyName=eval(d)['companyName'], startWork=eval(d)['startWork'])
+                                            location=eval(d)['location'], industry=eval(d)['industry'], position=eval(d)['position'], function=eval(d)['function'], companyName=eval(d)['companyName'], startWork=eval(d)['startWork'])
             edit_baseInfo.save()
-            # baseInfo = eval(d)
+            baseInfo = eval(d)
         elif action == 'edit_jobIntentInfo':
             jobIntentInfo = eval(d)
         elif message['action'] == 'add_skillInfo':
@@ -191,7 +191,7 @@ def test(request):
             print(eval(d))
 
             print(worksInfo)
-            worksInfo.pop(eval(d))
+            # worksInfo.pop(eval(d))
         data2 = {
             'state': 'success',
             'personInfo': personInfo,
@@ -205,3 +205,19 @@ def test(request):
             'othersInfo': othersInfo,
         }
         return HttpResponse(json.dumps(data2), content_type="application/json")
+
+
+# 测试
+@csrf_exempt
+def test3(request):
+    # msg = request.POST
+    # msg = json.loads(request.POST.param)
+    msg='1'
+    username = json.loads(request.POST['param'])['username']
+    if username=='13756053551':
+        msg='first'
+    data2 = {
+        'state': 'success',
+        'msg':msg
+    }
+    return HttpResponse(json.dumps(data2), content_type="application/json")
