@@ -212,12 +212,14 @@ def test(request):
 def test3(request):
     # msg = request.POST
     # msg = json.loads(request.POST.param)
-    msg='1'
+    msg = '1'
+    userid = '03291'
     username = json.loads(request.POST['param'])['username']
-    if username=='13756053551':
-        msg='first'
+    if username == '13756053551':
+        msg = 'first'
     data2 = {
         'state': 'success',
-        'msg':msg
+        'msg': msg,
+        'userid': userid
     }
     return HttpResponse(json.dumps(data2), content_type="application/json")
