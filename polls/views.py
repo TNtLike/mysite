@@ -243,9 +243,12 @@ def test3(request):
 @csrf_exempt
 def test4(request):
     try:
-        send_mail('Subject here', 'Here is the message.This is a test email from <a>qlcnb.club</a>.You can visit our website without sign up an account', '987073656@qq.com',
-                 ['980188449@qq.com','qiulangcheng@gmail.com'], fail_silently=False
-                )
+        send_mail('Subject here',  # 邮件标题
+                  'Here is the message.This is a test email from <a>qlcnb.club</a>.You can visit our website without sign up an account',  # 邮件正文
+                  '987073656@qq.com',  # 发件人
+                  ['980188449@qq.com', 'qiulangcheng@gmail.com'],  # 收件人
+                  fail_silently=False  # 错误通知
+                  )
     except SMTPException:
         print(SMTPException)
     return HttpResponse("hello World!")
