@@ -4,6 +4,8 @@ from django.views.decorators.csrf import csrf_exempt
 import datetime
 import json
 from django.core import serializers
+from django.core.mail import send_mail
+from smtplib import SMTPException
 from .models import person
 from .models import person_resume
 from .models import enterprise
@@ -106,6 +108,16 @@ def test(request):
     othersInfo = [{
         'content': "ACM",
     }]
+    tags = [{
+        'name': "项目管理",
+        'value': True
+    }, {
+        'name': "123",
+        'value': True
+    }, {
+        'name': "123333",
+        'value': False
+    }]
     baseInfo = {
         'name': '王小明',
         'sex': '男',
@@ -137,6 +149,7 @@ def test(request):
             'personInfo': personInfo,
             'baseInfo': baseInfo,
             'jobIntentInfo': jobIntentInfo,
+            'tags': tags,
             'worksInfo': worksInfo,
             'edusInfo': edusInfo,
             'projectsInfo': projectsInfo,
@@ -210,11 +223,12 @@ def test(request):
 # 测试
 @csrf_exempt
 def test3(request):
-    # msg = request.POST
+    mssg = request.POST
+    print(mssg)
     # msg = json.loads(request.POST.param)
     msg = '1'
     userid = '03291'
-    username = json.loads(request.POST['param'])['username']
+    username = json.loads(request.POST['mobil'])
     if username == '13756053551':
         msg = 'first'
     data2 = {
@@ -223,3 +237,15 @@ def test3(request):
         'userid': userid
     }
     return HttpResponse(json.dumps(data2), content_type="application/json")
+
+
+# 发送邮件测试
+@csrf_exempt
+def test4(request):
+    try:
+        send_mail('Subject here', 'Here is the message.This is a test email from <a>qlcnb.club</a>.You can visit our website without sign up an account', '987073656@qq.com',
+                 ['980188449@qq.com','qiulangcheng@gmail.com'], fail_silently=False
+                )
+    except SMTPException:
+        print(SMTPException)
+    return HttpResponse("hello World!")
