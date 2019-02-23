@@ -4,8 +4,10 @@ from django.views.decorators.csrf import csrf_exempt
 import datetime
 import json
 from django.core import serializers
-from django.core.mail import send_mail
-from smtplib import SMTPException
+
+# email
+from django.core.mail import EmailMessage
+
 from .models import person
 from .models import person_resume
 from .models import enterprise
@@ -242,13 +244,11 @@ def test3(request):
 # 发送邮件测试
 @csrf_exempt
 def test4(request):
-    try:
-        send_mail('Subject here',  # 邮件标题
-                  'Here is the message.This is a test email from <a>qlcnb.club</a>.You can visit our website without sign up an account',  # 邮件正文
-                  '987073656@qq.com',  # 发件人
-                  ['980188449@qq.com', 'qiulangcheng@gmail.com'],  # 收件人
-                  fail_silently=False  # 错误通知
-                  )
-    except SMTPException:
-        print(SMTPException)
+    title = u'邮件主题'
+    host = 'qiulangcheng@qlcnb.club'
+    resHost = ['qiulangcheng@gmail.com']
+    html_content = "<h2>Here is the message.</h2> <p>This is a test email from <a href='qlcnb.club'>qlcnb.club</a>.</p> <p>You can visit our website without sign up an account</p>"
+    email = EmailMessage(title, html_content, host, resHost)
+    email.content_subtype = "html"
+    email.send()
     return HttpResponse("hello World!")
