@@ -9,7 +9,7 @@ class person(models.Model):
     password = models.CharField(max_length=20)
     question = models.CharField(max_length=20)
     answer = models.CharField(max_length=20)
-    email = models.CharField(max_length=20)
+    email = models.CharField(max_length=30)
 
 
 class person_resume(models.Model):

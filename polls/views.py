@@ -32,20 +32,19 @@ def hello(request):
 def submitUser(request):
     message = json.loads(request.body)
     print(message)
-    test1 = person(username=message['username'], password=message['password'],
-                   question=message['question'], answer=message['answer'], email=message['email'],)
-    if test1.save():
-        info = 'failed'
+    save_new_person = person(username=message['username'], password=message['password'],
+                             question=message['question'], answer=message['answer'], email=message['email'],)
+    if save_new_person.save():
+        info = 'error'
+        msg = '注册失败'
     else:
-        info = 'success'
+        info = 'ok'
+        msg = '注册成功'
     data = {
-        'message': info,
+        'status': info,
+        'msg': msg
     }
-    if request.method == 'GET':
-        return HttpResponse(json.dumps(data), content_type="application/json")
-
-    elif request.method == 'POST':
-        return HttpResponse(json.dumps(data), content_type="application/json")
+    return HttpResponse(json.dumps(data), content_type="application/json")
 
 
 # 登录
@@ -65,8 +64,8 @@ def login(request):
     except person.DoesNotExist:
         info = 2
     data = {
-        'message': info,
-        'username': username
+        'status': info,
+        # 'username': username
     }
     return HttpResponse(json.dumps(data), content_type="application/json")
 
@@ -228,7 +227,7 @@ def test3(request):
     mssg = request.POST
     print(mssg)
     # msg = json.loads(request.POST.param)
-   
+
     data2 = {
         'state': 'ok',
         'msg': '1',
