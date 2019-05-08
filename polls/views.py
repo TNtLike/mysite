@@ -8,33 +8,20 @@ from django.core import serializers
 # email
 from django.core.mail import EmailMessage
 
-from .models import person
-from .models import person_resume
-from .models import enterprise
-from .models import enterprise_jobs
-from .models import person_baseInfo
-
-
-def home_page(request):
-    context = {}
-    context['message'] = '{}'.format(datetime.datetime.now())
-    return render(request, 'index.html', context)
-
-
-def hello(request):
-    context = {}
-    context['message'] = '{}'.format(datetime.datetime.now())
-    return render(request, 'hello.html', context)
+from .models import psn
+from .models import psn_resume
+from .models import ent
+from .models import ent_jobs
+from .models import ent_baseInfo
 
 
 # 个人用户注册
 @csrf_exempt
 def submitUser(request):
     message = json.loads(request.body)
-    print(message)
-    save_new_person = person(username=message['username'], password=message['password'],
-                             question=message['question'], answer=message['answer'], email=message['email'],)
-    if save_new_person.save():
+    save_new_psn = psn(username=message['username'], password=message['password'],
+                       question=message['question'], answer=message['answer'], email=message['email'],)
+    if save_new_psn.save():
         info = 'error'
         msg = '注册失败'
     else:
@@ -69,8 +56,11 @@ def login(request):
     }
     return HttpResponse(json.dumps(data), content_type="application/json")
 
+# 身份校验
 
 # 测试
+
+
 @csrf_exempt
 def test(request):
     worksInfo = [{
