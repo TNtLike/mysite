@@ -1,8 +1,9 @@
 
 from django.urls import include, path
 from . import views
-# ../polls/+
+# ../apis/+
 urlpatterns = [
-    path('submitUser', views.submitUser),
+    path('psnSubmitUser', views.psnSubmitUser),
+    path('entSubmitUser', views.entSubmitUser),
     path('login', views.login),
 ]

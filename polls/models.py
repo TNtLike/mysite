@@ -4,7 +4,7 @@ from django.db import models
 
 
 class psn(models.Model):
-    psnid = models.AutoField(primary_key=True)
+    psnid = models.CharField(max_length=64, primary_key=True)
     username = models.CharField(max_length=20)
     password = models.CharField(max_length=20)
     question = models.CharField(max_length=20)
@@ -13,7 +13,7 @@ class psn(models.Model):
 
 
 class psn_resume(models.Model):
-    resumeid = models.AutoField(primary_key=True)
+    resumeid = models.CharField(max_length=64, primary_key=True)
     gender = models.CharField(max_length=20)
     location = models.CharField(max_length=20)
     nowJobs = models.CharField(max_length=20)
@@ -30,7 +30,7 @@ class psn_resume(models.Model):
 
 
 class ent(models.Model):
-    entid = models.AutoField(primary_key=True)
+    entid = models.CharField(max_length=64, primary_key=True)
     username = models.CharField(max_length=20)
     password = models.CharField(max_length=20)
     question = models.CharField(max_length=20)
@@ -38,7 +38,7 @@ class ent(models.Model):
 
 
 class ent_baseInfo(models.Model):
-    entid = models.AutoField(primary_key=True)
+    entid = models.AutoField(max_length=64, primary_key=True)
     entLocation = models.CharField(max_length=20)
     entName = models.CharField(max_length=20)
     entEmail = models.CharField(max_length=20)
@@ -46,7 +46,7 @@ class ent_baseInfo(models.Model):
 
 
 class ent_jobs(models.Model):
-    jobid = models.AutoField(primary_key=True)
+    jobid = models.CharField(max_length=64, primary_key=True)
     enterpriseName = models.CharField(max_length=50)
     jobsName = models.CharField(max_length=20)
     jobsCodition = models.CharField(max_length=30)

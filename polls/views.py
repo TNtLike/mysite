@@ -1,8 +1,11 @@
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+
 import datetime
 import json
+# 生成id
+import uuid
 from django.core import serializers
 
 # email
@@ -17,16 +20,49 @@ from .models import ent_baseInfo
 
 # 个人用户注册
 @csrf_exempt
-def submitUser(request):
+def psnSubmitUser(request):
     message = json.loads(request.body)
-    save_new_psn = psn(username=message['username'], password=message['password'],
-                       question=message['question'], answer=message['answer'], email=message['email'],)
-    if save_new_psn.save():
+    try:
+        m = psn.objects.get(username=message['username'])
         info = 'error'
-        msg = '注册失败'
-    else:
-        info = 'ok'
-        msg = '注册成功'
+        msg = '用户名已存在，请更换'
+    except psn.DoesNotExist:
+        save_new_psn_psnid = str(uuid.uuid1())
+        save_new_psn = psn(psnid=save_new_psn_psnid, username=message['username'], password=message['password'],
+                           question=message['question'], answer=message['answer'], email=message['email'],)
+        if save_new_psn.save():
+            info = 'error'
+            msg = '注册失败'
+        else:
+            request.session['psnid'] = save_new_psn_psnid
+            info = 'ok'
+            msg = save_new_psn_psnid
+    data = {
+        'status': info,
+        'msg': msg
+    }
+    return HttpResponse(json.dumps(data), content_type="application/json")
+
+
+# 企业用户注册
+@csrf_exempt
+def entSubmitUser(request):
+    message = json.loads(request.body)
+    try:
+        m = ent.objects.get(username=message['username'])
+        info = 'error'
+        msg = '用户名已存在，请更换'
+    except ent.DoesNotExist:
+        save_new_ent_psnid = str(uuid.uuid1())
+        save_new_ent = ent(entid=save_new_ent_psnid, username=message['username'], password=message['password'],
+                           question=message['question'], answer=message['answer'], email=message['email'],)
+        if save_new_ent.save():
+            info = 'error'
+            msg = '注册失败'
+        else:
+            request.session['psnid'] = save_new_ent_psnid
+            info = 'ok'
+            msg = save_new_ent_psnid
     data = {
         'status': info,
         'msg': msg
@@ -41,14 +77,12 @@ def login(request):
     info = 0
     username = ''
     try:
-        m = person.objects.get(username=message['username'])
+        m = psn.objects.get(username=message['username'])
         if m.password == message['password']:
-            request.session['isLogin'] = True
-            request.session['username'] = m.username
-            request.session['userId'] = m.id
+            request.session['psnid'] = m.psnid
             info = 1
             username = m.username
-    except person.DoesNotExist:
+    except psn.DoesNotExist:
         info = 2
     data = {
         'status': info,
