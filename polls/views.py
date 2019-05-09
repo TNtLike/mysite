@@ -23,22 +23,25 @@ from .models import ent_baseInfo
 def psnSubmitUser(request):
     message = json.loads(request.body)
     try:
-        m = psn.objects.get(username=message['username'])
-        info = 'error'
-        msg = '用户名已存在，请更换'
+        if psn.objects.get(username=message['username']):
+            status = 'error'
+            msg = '用户名已存在，请更换'
+        elif psn.objects.get(email=message['email']):
+            status = 'error'
+            msg = '邮箱已被占用，请更换'
     except psn.DoesNotExist:
         save_new_psn_psnid = str(uuid.uuid1())
         save_new_psn = psn(psnid=save_new_psn_psnid, username=message['username'], password=message['password'],
-                           question=message['question'], answer=message['answer'], email=message['email'],)
+                           question=message['question'], answer=message['answer'], email=message['email'], tel=message['tel'])
         if save_new_psn.save():
-            info = 'error'
+            status = 'error'
             msg = '注册失败'
         else:
             request.session['psnid'] = save_new_psn_psnid
-            info = 'ok'
+            status = 'ok'
             msg = save_new_psn_psnid
     data = {
-        'status': info,
+        'status': status,
         'msg': msg
     }
     return HttpResponse(json.dumps(data), content_type="application/json")
@@ -49,225 +52,86 @@ def psnSubmitUser(request):
 def entSubmitUser(request):
     message = json.loads(request.body)
     try:
-        m = ent.objects.get(username=message['username'])
-        info = 'error'
-        msg = '用户名已存在，请更换'
+        if ent.objects.get(username=message['username']):
+            status = 'error'
+            msg = '用户名已存在，请更换'
+        elif ent.objects.get(email=message['email']):
+            status = 'error'
+            msg = '邮箱已被占用，请更换'
     except ent.DoesNotExist:
-        save_new_ent_psnid = str(uuid.uuid1())
-        save_new_ent = ent(entid=save_new_ent_psnid, username=message['username'], password=message['password'],
-                           question=message['question'], answer=message['answer'], email=message['email'],)
+        save_new_ent_entid = str(uuid.uuid1())
+        save_new_ent = ent(entid=save_new_ent_entid, username=message['username'], password=message['password'],
+                           question=message['question'], answer=message['answer'], email=message['email'], tel=message['tel'])
         if save_new_ent.save():
-            info = 'error'
+            status = 'error'
             msg = '注册失败'
         else:
-            request.session['psnid'] = save_new_ent_psnid
-            info = 'ok'
-            msg = save_new_ent_psnid
+            request.session['entid'] = save_new_ent_entid
+            status = 'ok'
+            msg = save_new_ent_entid
     data = {
-        'status': info,
+        'status': status,
         'msg': msg
     }
     return HttpResponse(json.dumps(data), content_type="application/json")
 
 
-# 登录
+# 个人登录
 @csrf_exempt
-def login(request):
+def psnLogin(request):
     message = json.loads(request.body)
-    info = 0
-    username = ''
+    status = 0
+    msg = ''
     try:
         m = psn.objects.get(username=message['username'])
         if m.password == message['password']:
             request.session['psnid'] = m.psnid
-            info = 1
-            username = m.username
+            status = 1
+            status = m.psnid
     except psn.DoesNotExist:
-        info = 2
+        status = 2
+        status = ''
     data = {
-        'status': info,
+        'status': status,
+        'mag': msg
         # 'username': username
     }
     return HttpResponse(json.dumps(data), content_type="application/json")
 
-# 身份校验
 
-# 测试
-
-
+# 企业登录
 @csrf_exempt
-def test(request):
-    worksInfo = [{
-        'companyName': "宁波智士网络科技有限公司",
-        'industry': "计算机软件",
-        'location': "宁波",
-        'workTime': "2019-02 - 2019-03",
-        'department': "开发部门",
-        'position': "前端开发工程师",
-        'pay': '122222',
-        'description': "11111111111111111111",
-    }]
-    edusInfo = [{
-        'school': "长春工程学院",
-        'major': "计算机科学与技术",
-        'degree': "本科",
-        'gradTime': "2019",
-        'transfer': True,
-        'overseas': False,
-    }]
-    projectsInfo = [{
-        'projectName': "网站",
-        'projectTime': "2018-02 - 2018-03",
-        'score': "qwefdwdf",
-        'description': "前端开发",
-        'duty': "开发",
-    }]
-    skillsInfo = [{
-        'skillName': "铸造工艺",
-        'proficiency': "精通",
-    }]
-    langsInfo = [{
-        'type': "英语",
-        'proficiency': "简单沟通",
-    }]
-    othersInfo = [{
-        'content': "ACM",
-    }]
-    tags = [{
-        'name': "项目管理",
-        'value': True
-    }, {
-        'name': "123",
-        'value': True
-    }, {
-        'name': "123333",
-        'value': False
-    }]
-    baseInfo = {
-        'name': '王小明',
-        'sex': '男',
-        'location': '宁波',
-        'industry': '计算机软件',
-        'function': 'web全栈开发',
-        'position': '前端开发',
-        'companyName': '宁波智士网络科技有限公司',
-        'startWork': '2015'
+def entLogin(request):
+    message = json.loads(request.body)
+    status = 0
+    msg = ''
+    try:
+        m = ent.objects.get(username=message['username'])
+        if m.password == message['password']:
+            request.session['entid'] = m.entid
+            status = 1
+            msg = m.entid
+    except ent.DoesNotExist:
+        status = 2
+        msg = ''
+    data = {
+        'status': status,
+        'msg': msg
+        # 'username': username
     }
-    personInfo = {
-        'location': '宁波',
-        'workState': '离职',
-        'birth': '1997-01',
-        'marriage': '未婚'
-    }
-    jobIntentInfo = {
-        'pay': '面议',
-        'location': '宁波',
-        'industry': '其他',
-        'function': 'web前端开发',
-        'type': '全职',
-        'introduction': 'ofaefaafamadsmalsmdalkmsdlqwodqpwoekpoqwkepoqkweqpwoekqpwosefspmfslkmcvxlmlkmekpqowkeqwpokokznsljlzlmklamscopmasa;lsmdl;asojkdapoksd;lmsdoajsdioansaloimspo'
-    }
-
-    if request.method == 'GET':
-        print(person_baseInfo.objects.get(id=1).name)
-        data = {
-            'personInfo': personInfo,
-            'baseInfo': baseInfo,
-            'jobIntentInfo': jobIntentInfo,
-            'tags': tags,
-            'worksInfo': worksInfo,
-            'edusInfo': edusInfo,
-            'projectsInfo': projectsInfo,
-            'skillsInfo': skillsInfo,
-            'langsInfo': langsInfo,
-            'othersInfo': othersInfo,
-        }
-
-        return HttpResponse(json.dumps(data), content_type="application/json")
-    elif request.method == 'POST':
-
-        message = request.POST
-        print(message)
-        action = message['action']
-        d = message['data']
-        if action == 'edit_personInfo':
-            personInfo = eval(d)
-        elif action == 'edit_baseInfo':
-            edit_baseInfo = person_baseInfo(name=eval(d)['name'], sex=eval(d)['sex'],
-                                            location=eval(d)['location'], industry=eval(d)['industry'], position=eval(d)['position'], function=eval(d)['function'], companyName=eval(d)['companyName'], startWork=eval(d)['startWork'])
-            edit_baseInfo.save()
-            baseInfo = eval(d)
-        elif action == 'edit_jobIntentInfo':
-            jobIntentInfo = eval(d)
-        elif message['action'] == 'add_skillInfo':
-            skillsInfo.append(eval(d))
-            print(skillsInfo)
-        elif message['action'] == 'add_langInfo':
-            langsInfo.append(eval(d))
-            print(langsInfo)
-        elif message['action'] == 'add_workInfo':
-            worksInfo.append(eval(d))
-            print(worksInfo)
-
-        elif message['action'] == 'add_eduInfo':
-            edusInfo.append(eval(d))
-            print(edusInfo)
-
-        elif message['action'] == 'edit_workInfo':
-            print(eval(d))
-            index = eval(message['index'])
-            worksInfo[index] = eval(d)
-        elif message['action'] == 'edit_eduInfo':
-            print(d)
-            # index = eval(message['index'])
-            # edusInfo[index] = eval(d)
-        elif message['action'] == 'edit_skillInfo':
-            print(eval(d))
-            index = eval(message['index'])
-            skillsInfo[index] = eval(d)
-        elif message['action'] == 'del_workInfo':
-            print(eval(d))
-
-            print(worksInfo)
-            # worksInfo.pop(eval(d))
-        data2 = {
-            'state': 'success',
-            'personInfo': personInfo,
-            'baseInfo': baseInfo,
-            'jobIntentInfo': jobIntentInfo,
-            'worksInfo': worksInfo,
-            'edusInfo': edusInfo,
-            'projectsInfo': projectsInfo,
-            'skillsInfo': skillsInfo,
-            'langsInfo': langsInfo,
-            'othersInfo': othersInfo,
-        }
-        return HttpResponse(json.dumps(data2), content_type="application/json")
-
-
-# 测试
-@csrf_exempt
-def test3(request):
-    mssg = request.POST
-    print(mssg)
-    # msg = json.loads(request.POST.param)
-
-    data2 = {
-        'state': 'ok',
-        'msg': '1',
-        'userid': '2'
-    }
-    return HttpResponse(json.dumps(data2), content_type="application/json")
+    return HttpResponse(json.dumps(data), content_type="application/json")
 
 
 # 发送邮件测试
 @csrf_exempt
-def test4(request):
+def sendEmail(resHostList, code):
     title = u'邮件主题'
     host = 'qiulangcheng@qlcnb.club'
-    resHost = ['qiulangcheng@gmail.com']
-    html_content = "<h2>Here is the message.</h2> <p>This is a test email from <a href='qlcnb.club'>qlcnb.club</a>.</p> <p>You can visit our website without sign up an account</p>"
+    resHost = resHostList
+    html_content = "<h2>您好！</h2> <p>欢迎注册，验证码为：" + code + "。</p> <p>如非本人注册请忽略此邮件</p>"
     email = EmailMessage(title, html_content, host, resHost)
     email.content_subtype = "html"
-    email.send()
-    return HttpResponse("hello World!")
+    if email.send():
+        return "ok"
+    else:
+        return "error"

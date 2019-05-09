@@ -5,5 +5,6 @@ from . import views
 urlpatterns = [
     path('psnSubmitUser', views.psnSubmitUser),
     path('entSubmitUser', views.entSubmitUser),
-    path('login', views.login),
+    path('psnLogin', views.psnLogin),
+    path('entLogin', views.entLogin),
 ]

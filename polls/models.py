@@ -10,9 +10,12 @@ class psn(models.Model):
     question = models.CharField(max_length=20)
     answer = models.CharField(max_length=20)
     email = models.CharField(max_length=30)
+    tel = models.CharField(max_length=15)
 
 
 class psn_resume(models.Model):
+    psnid = models.ForeignKey(
+        'psn', on_delete=models.CASCADE)
     resumeid = models.CharField(max_length=64, primary_key=True)
     gender = models.CharField(max_length=20)
     location = models.CharField(max_length=20)
@@ -35,10 +38,13 @@ class ent(models.Model):
     password = models.CharField(max_length=20)
     question = models.CharField(max_length=20)
     answer = models.CharField(max_length=20)
+    tel = models.CharField(max_length=15)
+    email = models.CharField(max_length=30)
 
 
 class ent_baseInfo(models.Model):
-    entid = models.AutoField(max_length=64, primary_key=True)
+    entid = models.ForeignKey(
+        'ent', on_delete=models.CASCADE)
     entLocation = models.CharField(max_length=20)
     entName = models.CharField(max_length=20)
     entEmail = models.CharField(max_length=20)
@@ -46,6 +52,8 @@ class ent_baseInfo(models.Model):
 
 
 class ent_jobs(models.Model):
+    entid = models.ForeignKey(
+        'ent', on_delete=models.CASCADE)
     jobid = models.CharField(max_length=64, primary_key=True)
     enterpriseName = models.CharField(max_length=50)
     jobsName = models.CharField(max_length=20)

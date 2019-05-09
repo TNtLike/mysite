@@ -85,7 +85,7 @@ DATABASES = {
     # }
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'tests',
+        'NAME': 'djangoTest',
         'USER': 'root',
         'PASSWORD': '123456789',
         'HOST': 'localhost',
@@ -120,8 +120,8 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
 
+# 设置时区和语言
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
 
 USE_I18N = True
@@ -156,3 +156,5 @@ EMAIL_HOST = 'smtp.exmail.qq.com'  # 发送邮件的邮箱 的 SMTP服务器
 EMAIL_PORT = 465  # 发件箱的SMTP服务器端口
 EMAIL_HOST_USER = 'qiulangcheng@qlcnb.club'  # 发送邮件的邮箱地址
 EMAIL_HOST_PASSWORD = 'Qlc987073656'  # 发送邮件的邮箱密码
+
+
