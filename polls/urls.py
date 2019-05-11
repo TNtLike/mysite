@@ -7,4 +7,5 @@ urlpatterns = [
     path('entSubmitUser', views.entSubmitUser),
     path('psnLogin', views.psnLogin),
     path('entLogin', views.entLogin),
+    path('entBaseInfoSub', views.entBaseInfoSub),
 ]

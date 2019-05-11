@@ -45,10 +45,13 @@ class ent(models.Model):
 class ent_baseInfo(models.Model):
     entid = models.ForeignKey(
         'ent', on_delete=models.CASCADE)
-    entLocation = models.CharField(max_length=20)
+    entAddress = models.CharField(max_length=20)
     entName = models.CharField(max_length=20)
-    entEmail = models.CharField(max_length=20)
-    entIntroduction = models.TextField()
+    entContectName = models.CharField(max_length=20,default='HR')
+    entCertId = models.CharField(max_length=20)
+    entClass = models.CharField(max_length=20,default='私营企业')
+    entScale = models.CharField(max_length=20,default='1-49人')
+    entSummary = models.TextField()
 
 
 class ent_jobs(models.Model):

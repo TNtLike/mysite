@@ -122,6 +122,44 @@ def entLogin(request):
     return HttpResponse(json.dumps(data), content_type="application/json")
 
 
+# 企业提交基本信息
+@csrf_exempt
+def entBaseInfoSub(request):
+    message = json.loads(request.body)
+    status = 'error'
+    msg = ''
+    if request.session.get("entid"):
+        try:
+            if ent_baseInfo.objects.get(entName=message['entName']):
+                status = 'error'
+                msg = '企业名已存在，请更换'
+            elif ent_baseInfo.objects.get(entCertId=message['email']):
+                status = 'error'
+                msg = '营业执照已被占用，请确认'
+        except ent_baseInfo.DoesNotExist:
+            # save_new_ent_entid = str(uuid.uuid1())
+            save_new_entBaseInfo = ent_baseInfo(entid_id=request.session.get('entid'),
+                                                entName=message['entName'], entContectName=message['entContectName'],
+                                                entAddress=message['entAddress'], entCertId=message['entCertId'], entClass=message['entClass'], entScale=message['entScale'], entSummary=message['entSummary'])
+            if save_new_entBaseInfo.save():
+                status = 'error'
+                msg = '保存失败'
+            else:
+                # request.session['entid'] = save_new_ent_entid
+                status = 'ok'
+                msg = ''
+
+    else:
+        status = "error"
+        msg = '登录超时，请重新登陆'
+
+    data = {
+        'status': status,
+        'msg': msg
+    }
+    return HttpResponse(json.dumps(data), content_type="application/json")
+
+
 # 发送邮件测试
 @csrf_exempt
 def sendEmail(resHostList, code):

@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    # 'corsheaders',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -52,7 +53,12 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-CORS_ORIGIN_ALLOW_ALL = True
+# 设置跨域资源共享
+CORS_ORIGIN_ALLOW_ALL = False
+CORS_ORIGIN_WHITELIST = (
+    'localhost:8080'
+)
+CORS_ALLOW_CREDENTIALS = True
 
 ROOT_URLCONF = 'mysite.urls'
 
@@ -88,7 +94,7 @@ DATABASES = {
         'NAME': 'djangoTest',
         'USER': 'root',
         'PASSWORD': '123456789',
-        'HOST': 'localhost',
+        'HOST': '127.0.0.1',
         'PORT': '3306',
         'TEST': {
                 'CHARSET': 'utf8',
@@ -156,5 +162,3 @@ EMAIL_HOST = 'smtp.exmail.qq.com'  # 发送邮件的邮箱 的 SMTP服务器
 EMAIL_PORT = 465  # 发件箱的SMTP服务器端口
 EMAIL_HOST_USER = 'qiulangcheng@qlcnb.club'  # 发送邮件的邮箱地址
 EMAIL_HOST_PASSWORD = 'Qlc987073656'  # 发送邮件的邮箱密码
-
-
