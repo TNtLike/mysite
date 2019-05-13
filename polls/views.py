@@ -28,18 +28,26 @@ def psnSubmitUser(request):
             msg = '用户名已存在，请更换'
         elif psn.objects.get(email=message['email']):
             status = 'error'
-            msg = '邮箱已被占用，请更换'
+            msg = '邮箱已被注册，请更换'
+        elif psn.objects.get(tel=message['tel']):
+            status = 'error'
+            msg = '邮箱已被注册，请更换'
     except psn.DoesNotExist:
-        save_new_psn_psnid = str(uuid.uuid1())
-        save_new_psn = psn(psnid=save_new_psn_psnid, username=message['username'], password=message['password'],
-                           question=message['question'], answer=message['answer'], email=message['email'], tel=message['tel'])
-        if save_new_psn.save():
+        saveNewPsnId = str(uuid.uuid1())
+        saveNewPsn = psn(psnid=saveNewPsnId, username=message['username'], password=message['password'],
+                         question=message['question'], answer=message['answer'], email=message['email'], tel=message['tel'])
+        if saveNewPsn.save():
             status = 'error'
             msg = '注册失败'
         else:
-            request.session['psnid'] = save_new_psn_psnid
+               # 注册个人用户的同时创建一份简历
+            saveNewPsnResumeId = str(uuid.uuid1())
+            saveNewPsnResume = psn_resume(
+                resumeid=saveNewPsnResumeId, psnid_id=saveNewPsnId, email=message['email'], tel=message['tel'])
+            saveNewPsnResume.save()
+            request.session['psnid'] = saveNewPsnId
             status = 'ok'
-            msg = save_new_psn_psnid
+            msg = saveNewPsnId
     data = {
         'status': status,
         'msg': msg
@@ -57,18 +65,21 @@ def entSubmitUser(request):
             msg = '用户名已存在，请更换'
         elif ent.objects.get(email=message['email']):
             status = 'error'
-            msg = '邮箱已被占用，请更换'
+            msg = '邮箱已被注册，请更换'
+        elif ent.objects.get(tel=message['tel']):
+            status = 'error'
+            msg = '手机号已被注册，请更换'
     except ent.DoesNotExist:
-        save_new_ent_entid = str(uuid.uuid1())
-        save_new_ent = ent(entid=save_new_ent_entid, username=message['username'], password=message['password'],
-                           question=message['question'], answer=message['answer'], email=message['email'], tel=message['tel'])
-        if save_new_ent.save():
+        saveNewEntId = str(uuid.uuid1())
+        saveNewEnt = ent(entid=saveNewEntId, username=message['username'], password=message['password'],
+                         question=message['question'], answer=message['answer'], email=message['email'], tel=message['tel'])
+        if saveNewEnt.save():
             status = 'error'
             msg = '注册失败'
         else:
-            request.session['entid'] = save_new_ent_entid
+            request.session['entid'] = saveNewEntId
             status = 'ok'
-            msg = save_new_ent_entid
+            msg = saveNewEntId
     data = {
         'status': status,
         'msg': msg
@@ -87,13 +98,34 @@ def psnLogin(request):
         if m.password == message['password']:
             request.session['psnid'] = m.psnid
             status = 1
-            status = m.psnid
+            msg = m.psnid
     except psn.DoesNotExist:
         status = 2
-        status = ''
+        msg = ''
     data = {
         'status': status,
         'mag': msg
+        # 'username': username
+    }
+    return HttpResponse(json.dumps(data), content_type="application/json")
+
+
+# 查询简历信息
+@csrf_exempt
+def getPsnResumeInfo(request):
+    message = json.loads(request.body)
+    status = 'error'
+    msg = ''
+    if request.session.get('psnid'):
+        try:
+            m = psn_resume.objects.filter(psnid_id=message['psnid'])
+            status = 'ok'
+            msg = serializers.serialize('json', m)
+        except psn_resume.DoesNotExist:
+            msg = '简历信息不存在'
+    data = {
+        'status': status,
+        'msg': msg
         # 'username': username
     }
     return HttpResponse(json.dumps(data), content_type="application/json")
@@ -128,7 +160,7 @@ def entBaseInfoSub(request):
     message = json.loads(request.body)
     status = 'error'
     msg = ''
-    if request.session.get("entid"):
+    if request.session.get('entid'):
         try:
             if ent_baseInfo.objects.get(entName=message['entName']):
                 status = 'error'
@@ -137,22 +169,45 @@ def entBaseInfoSub(request):
                 status = 'error'
                 msg = '营业执照已被占用，请确认'
         except ent_baseInfo.DoesNotExist:
-            # save_new_ent_entid = str(uuid.uuid1())
-            save_new_entBaseInfo = ent_baseInfo(entid_id=request.session.get('entid'),
-                                                entName=message['entName'], entContectName=message['entContectName'],
-                                                entAddress=message['entAddress'], entCertId=message['entCertId'], entClass=message['entClass'], entScale=message['entScale'], entSummary=message['entSummary'])
-            if save_new_entBaseInfo.save():
+            # saveNewEntId = str(uuid.uuid1())
+            saveNewEntBaseInfo = ent_baseInfo(entid_id=request.session.get('entid'),
+                                              entName=message['entName'], entContectName=message['entContectName'],
+                                              entAddress=message['entAddress'], entCertId=message['entCertId'], entClass=message['entClass'], entScale=message['entScale'], entSummary=message['entSummary'])
+            if saveNewEntBaseInfo.save():
                 status = 'error'
                 msg = '保存失败'
             else:
-                # request.session['entid'] = save_new_ent_entid
+                # request.session['entid'] = saveNewEntId
                 status = 'ok'
                 msg = ''
-
     else:
         status = "error"
         msg = '登录超时，请重新登陆'
 
+    data = {
+        'status': status,
+        'msg': msg
+    }
+    return HttpResponse(json.dumps(data), content_type="application/json")
+
+
+# 登出 删除会话
+@csrf_exempt
+def loginOut(request):
+    status = 'ok'
+    msg = '退出成功'
+    if request.session.get('entid'):
+        try:
+            del request.session['entid']
+        except KeyError:
+            status = 'error'
+            msg = '退出失败，请重试'
+    elif request.session.get('psnid'):
+        try:
+            del request.session['psnid']
+        except KeyError:
+            status = 'error'
+            msg = '退出失败，请重试'
     data = {
         'status': status,
         'msg': msg

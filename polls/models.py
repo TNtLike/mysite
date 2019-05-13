@@ -17,6 +17,8 @@ class psn_resume(models.Model):
     psnid = models.ForeignKey(
         'psn', on_delete=models.CASCADE)
     resumeid = models.CharField(max_length=64, primary_key=True)
+    email = models.CharField(max_length=30, default='example@example.com')
+    tel = models.CharField(max_length=15, default='13755555555')
     gender = models.CharField(max_length=20)
     location = models.CharField(max_length=20)
     nowJobs = models.CharField(max_length=20)
@@ -47,10 +49,10 @@ class ent_baseInfo(models.Model):
         'ent', on_delete=models.CASCADE)
     entAddress = models.CharField(max_length=20)
     entName = models.CharField(max_length=20)
-    entContectName = models.CharField(max_length=20,default='HR')
+    entContectName = models.CharField(max_length=20, default='HR')
     entCertId = models.CharField(max_length=20)
-    entClass = models.CharField(max_length=20,default='私营企业')
-    entScale = models.CharField(max_length=20,default='1-49人')
+    entClass = models.CharField(max_length=20, default='私营企业')
+    entScale = models.CharField(max_length=20, default='1-49人')
     entSummary = models.TextField()
 
 

@@ -19,5 +19,6 @@ from polls import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    # 接口url
     path('apis/', include('polls.urls')),
 ]
