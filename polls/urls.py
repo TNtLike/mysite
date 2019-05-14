@@ -9,5 +9,7 @@ urlpatterns = [
     path('entLogin', views.entLogin),
     path('entBaseInfoSub', views.entBaseInfoSub),
     path('loginOut', views.loginOut),
-    path('getPsnResumeInfo', views.getPsnResumeInfo)
+    path('getPsnResumeInfo', views.getPsnResumeInfo),
+    path('subPsnBaseInfo', views.subPsnBaseInfo),
+    path('subPsnProjectInfo', views.subPsnProjectInfo)
 ]

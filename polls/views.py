@@ -11,11 +11,15 @@ from django.core import serializers
 # email
 from django.core.mail import EmailMessage
 
+# model
 from .models import psn
 from .models import psn_resume
 from .models import ent
 from .models import ent_jobs
 from .models import ent_baseInfo
+from .models import psn_resume_project_exprience
+from .models import psn_resume_work_exprience
+from .models import psn_resume_edu_exprience
 
 
 # 个人用户注册
@@ -55,6 +59,119 @@ def psnSubmitUser(request):
     return HttpResponse(json.dumps(data), content_type="application/json")
 
 
+# 个人登录
+@csrf_exempt
+def psnLogin(request):
+    message = json.loads(request.body)
+    status = 0
+    msg = ''
+    try:
+        m = psn.objects.get(username=message['username'])
+        if m.password == message['password']:
+            request.session['psnid'] = m.psnid
+            status = 1
+            msg = m.psnid
+    except psn.DoesNotExist:
+        status = 2
+        msg = ''
+    data = {
+        'status': status,
+        'msg': msg
+        # 'username': username
+    }
+    return HttpResponse(json.dumps(data), content_type="application/json")
+
+
+# 查询简历信息
+@csrf_exempt
+def getPsnResumeInfo(request):
+    message = json.loads(request.body)
+    status = 'error'
+    msg = ''
+    if request.session.get('psnid'):
+        try:
+            m = psn_resume.objects.filter(psnid_id=message['psnid'])
+            status = 'ok'
+            msg = serializers.serialize('json', m)
+        except psn_resume.DoesNotExist:
+            msg = '简历信息不存在'
+    else:
+        msg = '登陆超时，请重新登陆'
+    data = {
+        'status': status,
+        'msg': msg
+    }
+    return HttpResponse(json.dumps(data), content_type="application/json")
+
+
+# 保存个人基本信息
+@csrf_exempt
+def subPsnBaseInfo(request):
+    message = json.loads(request.body)
+    status = 'error'
+    msg = ''
+    if request.session.get('psnid'):
+        m = message['msg']
+        try:
+            updatePsnBaseInfo = psn_resume.objects.filter(
+                psnid_id=message['psnid']).update(name=m['name'], age=m['age'], sex=m['sex'], location=m['location'], jobName=m['jobName'], jobPay=m['jobPay'], jobType=m['jobType'], jobAdd=m['jobAdd'], tel=m['tel'], email=m['email'], nowStatus=m['nowStatus'], updateTime=datetime.date.today())
+            if updatePsnBaseInfo:
+                status = 'ok'
+                msg = '保存成功'
+            else:
+                msg = '保存失败'
+        except psn_resume.DoesNotExist:
+            msg = '简历信息不存在'
+    else:
+        msg = '登陆超时，请重新登陆'
+    data = {
+        'status': status,
+        'msg': msg
+    }
+    return HttpResponse(json.dumps(data), content_type="application/json")
+
+
+# 保存个人项目信息
+@csrf_exempt
+def subPsnProjectInfo(request):
+    message = json.loads(request.body)
+    status = 'error'
+    msg = ''
+    if request.session.get('psnid'):
+        m = message['msg']
+        key = message['key']
+        resumeid = psn_resume.objects.get(
+            psnid_id=message['psnid']).resumeid
+        if key != '0000':
+            try:
+                updatePsnBaseInfo = psn_resume_project_exprience.objects.filter(
+                    resumeid_id=resumeid).update(jobName=m['jobName'], orgName=m['orgName'], startTime=m['startTime'], endTime=m['endTime'], tecName=m['tecName'], projectDisp=m['projectDisp'])
+                if updatePsnBaseInfo:
+                    status = 'ok'
+                    msg = '保存成功'
+                else:
+                    msg = '保存失败'
+            except psn_resume_project_exprience.DoesNotExist:
+                msg = '简历信息不存在'
+        else:
+            saveNewProjectInfoId = str(uuid.uuid1())
+            saveNewProjectInfo = psn_resume_project_exprience(projectid=saveNewProjectInfoId, resumeid_id=resumeid, jobName=m['jobName'], orgName=m[
+                                                              'orgName'], startTime=m['startTime'], endTime=m['endTime'], tecName=m['tecName'], projectDisp=m['projectDisp'])
+            if saveNewProjectInfo.save():
+                msg = '添加失败'
+            else:
+                status = 'ok'
+                msg = serializers.serialize('json', psn_resume_project_exprience.objects.filter(
+                    resumeid_id=resumeid))
+    else:
+        msg = '登陆超时，请重新登陆'
+    data = {
+        'status': status,
+        'msg': msg
+    }
+    return HttpResponse(json.dumps(data), content_type="application/json")
+
+
 # 企业用户注册
 @csrf_exempt
 def entSubmitUser(request):
@@ -83,50 +200,6 @@ def entSubmitUser(request):
     data = {
         'status': status,
         'msg': msg
-    }
-    return HttpResponse(json.dumps(data), content_type="application/json")
-
-
-# 个人登录
-@csrf_exempt
-def psnLogin(request):
-    message = json.loads(request.body)
-    status = 0
-    msg = ''
-    try:
-        m = psn.objects.get(username=message['username'])
-        if m.password == message['password']:
-            request.session['psnid'] = m.psnid
-            status = 1
-            msg = m.psnid
-    except psn.DoesNotExist:
-        status = 2
-        msg = ''
-    data = {
-        'status': status,
-        'mag': msg
-        # 'username': username
-    }
-    return HttpResponse(json.dumps(data), content_type="application/json")
-
-
-# 查询简历信息
-@csrf_exempt
-def getPsnResumeInfo(request):
-    message = json.loads(request.body)
-    status = 'error'
-    msg = ''
-    if request.session.get('psnid'):
-        try:
-            m = psn_resume.objects.filter(psnid_id=message['psnid'])
-            status = 'ok'
-            msg = serializers.serialize('json', m)
-        except psn_resume.DoesNotExist:
-            msg = '简历信息不存在'
-    data = {
-        'status': status,
-        'msg': msg
-        # 'username': username
     }
     return HttpResponse(json.dumps(data), content_type="application/json")
 

@@ -19,19 +19,49 @@ class psn_resume(models.Model):
     resumeid = models.CharField(max_length=64, primary_key=True)
     email = models.CharField(max_length=30, default='example@example.com')
     tel = models.CharField(max_length=15, default='13755555555')
-    gender = models.CharField(max_length=20)
-    location = models.CharField(max_length=20)
-    nowJobs = models.CharField(max_length=20)
-    nowPay = models.CharField(max_length=20)
-    personIntroduction = models.TextField()
     name = models.CharField(max_length=20)
+    age = models.IntegerField(default=0)
     sex = models.CharField(max_length=20)
     location = models.CharField(max_length=20)
-    industry = models.CharField(max_length=20)
-    function = models.CharField(max_length=20)
-    position = models.CharField(max_length=20)
-    companyName = models.CharField(max_length=20)
-    startWork = models.CharField(max_length=20)
+    jobAdd = models.CharField(max_length=20)
+    jobName = models.CharField(max_length=30)
+    jobType = models.CharField(max_length=10)
+    jobPay = models.CharField(max_length=12)
+    nowStatus = models.CharField(max_length=2, default='0')
+    updateTime = models.DateField(auto_now=True)
+
+
+class psn_resume_project_exprience(models.Model):
+    projectid = models.CharField(max_length=64, primary_key=True)
+    resumeid = models.ForeignKey(
+        'psn_resume', on_delete=models.CASCADE)
+    jobName = models.CharField(max_length=30)
+    orgName = models.CharField(max_length=50)
+    startTime = models.DateField(auto_now=False, auto_now_add=False)
+    endTime = models.DateField(auto_now=False, auto_now_add=False)
+    tecName = models.CharField(max_length=30)
+    projectDisp = models.TextField()
+
+
+class psn_resume_work_exprience(models.Model):
+    workid = models.CharField(max_length=64, primary_key=True)
+    resumeid = models.ForeignKey(
+        'psn_resume', on_delete=models.CASCADE)
+    jobName = models.CharField(max_length=30)
+    companyName = models.CharField(max_length=50)
+    startTime = models.DateField(auto_now=False, auto_now_add=False)
+    endTime = models.DateField(auto_now=False, auto_now_add=False)
+    workDisp = models.TextField()
+
+
+class psn_resume_edu_exprience(models.Model):
+    eduid = models.CharField(max_length=64, primary_key=True)
+    resumeid = models.ForeignKey(
+        'psn_resume', on_delete=models.CASCADE)
+    majorName = models.CharField(max_length=30)
+    schoolName = models.CharField(max_length=50)
+    gradTime = models.DateField(auto_now=False, auto_now_add=False)
+    degree = models.CharField(max_length=10)
 
 
 class ent(models.Model):
