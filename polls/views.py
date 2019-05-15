@@ -88,11 +88,23 @@ def getPsnResumeInfo(request):
     message = json.loads(request.body)
     status = 'error'
     msg = ''
+    data = {
+    }
+
     if request.session.get('psnid'):
         try:
-            m = psn_resume.objects.filter(psnid_id=message['psnid'])
+            resumeid = psn_resume.objects.get(
+                psnid_id=message['psnid']).resumeid
             status = 'ok'
-            msg = serializers.serialize('json', m)
+            baseinfoData = psn_resume.objects.order_by(
+                "updateTime").filter(psnid_id=message['psnid'])
+            print(psn_resume.objects.filter(psnid_id=message['psnid'])[0].pk)
+            data['psnBaseInfo']['id'] =
+            data['psnBaseInfo'] = serializers.serialize(
+                'json', )
+            data['psnProjectInfo'] = serializers.serialize(
+                'json', psn_resume_project_exprience.objects.filter(
+                    resumeid_id=resumeid))
         except psn_resume.DoesNotExist:
             msg = '简历信息不存在'
     else:
@@ -137,6 +149,7 @@ def subPsnProjectInfo(request):
     message = json.loads(request.body)
     status = 'error'
     msg = ''
+    data = {}
     if request.session.get('psnid'):
         m = message['msg']
         key = message['key']
@@ -145,10 +158,12 @@ def subPsnProjectInfo(request):
         if key != '0000':
             try:
                 updatePsnBaseInfo = psn_resume_project_exprience.objects.filter(
-                    resumeid_id=resumeid).update(jobName=m['jobName'], orgName=m['orgName'], startTime=m['startTime'], endTime=m['endTime'], tecName=m['tecName'], projectDisp=m['projectDisp'])
+                    projectid=key).update(jobName=m['jobName'], orgName=m['orgName'], startTime=m['startTime'], endTime=m['endTime'], tecName=m['tecName'], projectDisp=m['projectDisp'])
                 if updatePsnBaseInfo:
                     status = 'ok'
                     msg = '保存成功'
+                    data = m
+                    data['id'] = key
                 else:
                     msg = '保存失败'
             except psn_resume_project_exprience.DoesNotExist:
@@ -161,13 +176,15 @@ def subPsnProjectInfo(request):
                 msg = '添加失败'
             else:
                 status = 'ok'
-                msg = serializers.serialize('json', psn_resume_project_exprience.objects.filter(
-                    resumeid_id=resumeid))
+                msg = '添加成功'
+                data = m
+                data['id'] = saveNewProjectInfoId
     else:
         msg = '登陆超时，请重新登陆'
     data = {
         'status': status,
-        'msg': msg
+        'msg': msg,
+        'data': data
     }
     return HttpResponse(json.dumps(data), content_type="application/json")
 

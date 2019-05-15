@@ -50,7 +50,7 @@ class psn_resume_work_exprience(models.Model):
     jobName = models.CharField(max_length=30)
     companyName = models.CharField(max_length=50)
     startTime = models.DateField(auto_now=False, auto_now_add=False)
-    endTime = models.DateField(auto_now=True, auto_now_add=False)
+    endTime = models.DateField(auto_now=False, auto_now_add=False)
     workDisp = models.TextField()
 
 
@@ -64,12 +64,12 @@ class psn_resume_edu_exprience(models.Model):
     degree = models.CharField(max_length=10)
 
 
-class psn_send_job(models.Model):
+class send_job(models.Model):
     resumeid = models.ForeignKey(
         'psn_resume', on_delete=models.CASCADE)
     jobid = models.ForeignKey(
         'ent_jobs', on_delete=models.CASCADE)
-    gradTime = models.DateField(auto_now=False, auto_now_add=False)
+    sendTime = models.DateField(auto_now=True)
 
 
 class ent(models.Model):
