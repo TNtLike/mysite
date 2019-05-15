@@ -9,6 +9,4 @@ urlpatterns = [
     path('subPsnBaseInfo', views_psn.subPsnBaseInfo),
     path('subPsnProjectInfo', views_psn.subPsnProjectInfo),
     path('delPsnProjectInfo', views_psn.delPsnProjectInfo),
-
-
 ]
