@@ -35,6 +35,7 @@ class psn_resume_project_exprience(models.Model):
     projectid = models.CharField(max_length=64, primary_key=True)
     resumeid = models.ForeignKey(
         'psn_resume', on_delete=models.CASCADE)
+    projectName = models.CharField(max_length=30)
     jobName = models.CharField(max_length=30)
     orgName = models.CharField(max_length=50)
     startTime = models.DateField(auto_now=False, auto_now_add=False)
