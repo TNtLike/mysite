@@ -29,6 +29,8 @@ class psn_resume(models.Model):
     jobPay = models.CharField(max_length=12)
     nowStatus = models.CharField(max_length=2, default='0')
     updateTime = models.DateField(auto_now=True)
+    workExp = models.CharField(max_length=15, default='应届毕业生')
+    selfDisp = models.TextField(default='请输入一段自我描述')
 
 
 class psn_resume_project_exprience(models.Model):
@@ -61,7 +63,7 @@ class psn_resume_edu_exprience(models.Model):
         'psn_resume', on_delete=models.CASCADE)
     majorName = models.CharField(max_length=30)
     schoolName = models.CharField(max_length=50)
-    gradTime = models.DateField(auto_now=False, auto_now_add=False)
+    gradTime = models.IntegerField(default=2019)
     degree = models.CharField(max_length=10)
 
 
@@ -99,8 +101,15 @@ class ent_jobs(models.Model):
     entid = models.ForeignKey(
         'ent', on_delete=models.CASCADE)
     jobid = models.CharField(max_length=64, primary_key=True)
-    enterpriseName = models.CharField(max_length=50)
-    jobsName = models.CharField(max_length=20)
-    jobsCodition = models.CharField(max_length=30)
-    jobsLocation = models.CharField(max_length=30)
-    jobsPay = models.CharField(max_length=30)
+    jobName = models.CharField(max_length=20)
+    jobLocation = models.CharField(max_length=30)
+    jobAddress = models.CharField(max_length=50)
+    jobPay = models.CharField(max_length=30)
+    jobType = models.CharField(max_length=10)
+    jobClass = models.CharField(max_length=50)
+    jobDepart = models.CharField(max_length=30)
+    email = models.CharField(max_length=30)
+    degree = models.CharField(max_length=10)
+    workExp = models.CharField(max_length=15, default='应届毕业生')
+    jobReq = models.TextField()
+    updateTime = models.DateField(auto_now=True)

@@ -99,6 +99,14 @@ def getPsnResumeInfo(request):
                 'json', psn_resume_project_exprience.objects.order_by(
                     "startTime").filter(
                     resumeid_id=resumeid))
+            data['psnWorkInfo'] = serializers.serialize(
+                'json', psn_resume_work_exprience.objects.order_by(
+                    "startTime").filter(
+                    resumeid_id=resumeid))
+            data['psnEduInfo'] = serializers.serialize(
+                'json', psn_resume_edu_exprience.objects.order_by(
+                    "gradTime").filter(
+                    resumeid_id=resumeid))
         except psn_resume.DoesNotExist:
             msg = '简历信息不存在'
     else:
@@ -121,7 +129,7 @@ def subPsnBaseInfo(request):
         m = message['msg']
         try:
             updatePsnBaseInfo = psn_resume.objects.filter(
-                psnid_id=message['psnid']).update(name=m['name'], age=m['age'], sex=m['sex'], location=m['location'], jobName=m['jobName'], jobPay=m['jobPay'], jobType=m['jobType'], jobAdd=m['jobAdd'], tel=m['tel'], email=m['email'], nowStatus=m['nowStatus'], updateTime=datetime.date.today())
+                psnid_id=message['psnid']).update(name=m['name'], age=m['age'], sex=m['sex'], location=m['location'], workExp=m['workExp'], jobName=m['jobName'], jobPay=m['jobPay'], jobType=m['jobType'], jobAdd=m['jobAdd'], tel=m['tel'], email=m['email'], nowStatus=m['nowStatus'], selfDisp=m['selfDisp'], updateTime=datetime.date.today())
             if updatePsnBaseInfo:
                 status = 'ok'
                 msg = '保存成功'
@@ -200,6 +208,150 @@ def delPsnProjectInfo(request):
             status = 'ok'
             msg = '删除成功'
         except psn_resume_project_exprience.DoesNotExist:
+            msg = '删除失败'
+    else:
+        msg = '登陆超时'
+    data = {
+        'status': status,
+        'msg': msg,
+    }
+    return HttpResponse(json.dumps(data), content_type="application/json")
+
+
+# 保存工作经历信息
+@csrf_exempt
+def subPsnWorkInfo(request):
+    message = json.loads(request.body)
+    status = 'error'
+    msg = ''
+    data = {}
+    if request.session.get('psnid'):
+        m = message['msg']
+        key = message['key']
+        resumeid = psn_resume.objects.get(
+            psnid_id=message['psnid']).resumeid
+        if key != '0000':
+            try:
+                updatePsnWorkInfo = psn_resume_work_exprience.objects.filter(
+                    workid=key).update(companyName=m['companyName'], jobName=m['jobName'], startTime=m['startTime'], endTime=m['endTime'], workDisp=m['workDisp'])
+                if updatePsnWorkInfo:
+                    status = 'ok'
+                    msg = '保存成功'
+                    data = serializers.serialize('json', psn_resume_work_exprience.objects.order_by(
+                        "startTime").filter(
+                        resumeid_id=resumeid))
+                else:
+                    msg = '保存失败'
+            except psn_resume_work_exprience.DoesNotExist:
+                msg = '简历信息不存在'
+        else:
+            saveNewWorkInfoId = str(uuid.uuid1())
+            saveNewWorkInfo = psn_resume_work_exprience(workid=saveNewWorkInfoId, resumeid_id=resumeid, jobName=m['jobName'], companyName=m[
+                'companyName'], startTime=m['startTime'], endTime=m['endTime'], workDisp=m['workDisp'])
+            if saveNewWorkInfo.save():
+                msg = '添加失败'
+            else:
+                status = 'ok'
+                msg = '添加成功'
+                data = serializers.serialize('json', psn_resume_work_exprience.objects.order_by(
+                    "startTime").filter(
+                    resumeid_id=resumeid))
+    else:
+        msg = '登陆超时，请重新登陆'
+    data = {
+        'status': status,
+        'msg': msg,
+        'data': data
+    }
+    return HttpResponse(json.dumps(data), content_type="application/json")
+
+
+# 删除工作经历信息
+@csrf_exempt
+def delPsnWorkInfo(request):
+    message = json.loads(request.body)
+    status = 'error'
+    msg = ''
+    if request.session.get('psnid'):
+        try:
+            m = psn_resume_work_exprience.objects.get(
+                workid=message['msg'])
+            print(m.delete())
+            status = 'ok'
+            msg = '删除成功'
+        except psn_resume_work_exprience.DoesNotExist:
+            msg = '删除失败'
+    else:
+        msg = '登陆超时'
+    data = {
+        'status': status,
+        'msg': msg,
+    }
+    return HttpResponse(json.dumps(data), content_type="application/json")
+
+
+# 保存教育经历信息
+@csrf_exempt
+def subPsnEduInfo(request):
+    message = json.loads(request.body)
+    status = 'error'
+    msg = ''
+    data = {}
+    if request.session.get('psnid'):
+        m = message['msg']
+        key = message['key']
+        resumeid = psn_resume.objects.get(
+            psnid_id=message['psnid']).resumeid
+        if key != '0000':
+            try:
+                updatePsnEduInfo = psn_resume_edu_exprience.objects.filter(
+                    eduid=key).update(schoolName=m['schoolName'], majorName=m['majorName'], gradTime=m['gradTime'], degree=m['degree'])
+                if updatePsnEduInfo:
+                    status = 'ok'
+                    msg = '保存成功'
+                    data = serializers.serialize('json', psn_resume_edu_exprience.objects.order_by(
+                        "gradTime").filter(
+                        resumeid_id=resumeid))
+                else:
+                    msg = '保存失败'
+            except psn_resume_edu_exprience.DoesNotExist:
+                msg = '简历信息不存在'
+        else:
+            saveNewEduInfoId = str(uuid.uuid1())
+            saveNewEduInfo = psn_resume_edu_exprience(eduid=saveNewEduInfoId, resumeid_id=resumeid, majorName=m['majorName'], schoolName=m[
+                'schoolName'], gradTime=m['gradTime'], degree=m['degree'])
+            if saveNewEduInfo.save():
+                msg = '添加失败'
+            else:
+                status = 'ok'
+                msg = '添加成功'
+                data = serializers.serialize('json', psn_resume_edu_exprience.objects.order_by(
+                    "gradTime").filter(
+                    resumeid_id=resumeid))
+    else:
+        msg = '登陆超时，请重新登陆'
+    data = {
+        'status': status,
+        'msg': msg,
+        'data': data
+    }
+    return HttpResponse(json.dumps(data), content_type="application/json")
+
+
+# 删除教育经历信息
+@csrf_exempt
+def delPsnEduInfo(request):
+    message = json.loads(request.body)
+    status = 'error'
+    msg = ''
+    if request.session.get('psnid'):
+        try:
+            m = psn_resume_edu_exprience.objects.get(
+                eduid=message['msg'])
+            print(m.delete())
+            status = 'ok'
+            msg = '删除成功'
+        except psn_resume_edu_exprience.DoesNotExist:
             msg = '删除失败'
     else:
         msg = '登陆超时'

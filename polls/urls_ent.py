@@ -5,5 +5,6 @@ from . import views_ent
 urlpatterns = [
     path('entSubmitUser', views_ent.entSubmitUser),
     path('entLogin', views_ent.entLogin),
-    path('entBaseInfoSub', views_ent.entBaseInfoSub),
+    path('subEntBaseInfo', views_ent.subEntBaseInfo),
+    path('subEntJobInfo', views_ent.subEntJobInfo),
 ]
