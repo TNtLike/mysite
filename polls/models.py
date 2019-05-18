@@ -110,6 +110,6 @@ class ent_jobs(models.Model):
     jobDepart = models.CharField(max_length=30)
     email = models.CharField(max_length=30)
     degree = models.CharField(max_length=10)
-    workExp = models.CharField(max_length=15, default='应届毕业生')
+    workExp = models.CharField(max_length=15, default='不限')
     jobReq = models.TextField()
     updateTime = models.DateField(auto_now=True)
