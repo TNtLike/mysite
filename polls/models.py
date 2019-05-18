@@ -95,6 +95,7 @@ class ent_baseInfo(models.Model):
     entClass = models.CharField(max_length=20, default='私营企业')
     entScale = models.CharField(max_length=20, default='1-49人')
     entSummary = models.TextField()
+    entTag = models.TextField()
 
 
 class ent_jobs(models.Model):

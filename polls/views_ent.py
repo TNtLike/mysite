@@ -109,6 +109,69 @@ def subEntBaseInfo(request):
     return HttpResponse(json.dumps(data), content_type="application/json")
 
 
+# 查询基本信息
+@csrf_exempt
+def getEntBaseInfo(request):
+    message = json.loads(request.body)
+    status = 'error'
+    msg = ''
+    data = {
+    }
+    key = message['key']
+    if request.session.get('entid'):
+        if key != '0000':
+            status = 'ok'
+            msg = '查询成功'
+            data = serializers.serialize(
+                'json', ent_jobs.objects.filter(jobid=key))
+        else:
+            status = 'ok'
+            msg = '查询成功'
+            data['entBaseInfo'] = serializers.serialize(
+                'json', ent_baseInfo.objects.filter(entid_id=message['entid']))
+            data['entAccountInfo'] = serializers.serialize(
+                'json', ent.objects.filter(entid=message['entid']))
+            data['entJobInfo'] = serializers.serialize(
+                'json', ent_jobs.objects.filter(entid_id=message['entid']))
+    else:
+        msg = '登陆超时，请重新登陆'
+    data = {
+        'status': status,
+        'msg': msg,
+        'data': data
+    }
+    return HttpResponse(json.dumps(data), content_type="application/json")
+
+
+# 企业提交基本信息
+@csrf_exempt
+def updateEntBaseInfo(request):
+    message = json.loads(request.body)
+    status = 'error'
+    msg = ''
+    if request.session.get('entid'):
+        m = message['msg']
+        try:
+            updateEntAccountInfo = ent.objects.filter(
+                entid=message['entid']).update(tel=m['tel'], email=m['email'])
+            updateEntBaseInfo = ent_baseInfo.objects.filter(
+                entid_id=message['entid']).update(entName=m['entName'], entAddress=m['entAddress'], entCertId=m['entCertId'], entClass=m['entClass'], entScale=m['entScale'], entSummary=m['entSummary'], entTag=m['entTag'], entContectName=m['entContectName'])
+            if updateEntBaseInfo and updateEntAccountInfo:
+                status = 'ok'
+                msg = '保存成功'
+            else:
+                msg = '保存失败'
+        except ent_baseInfo.DoesNotExist:
+            msg = '信息不存在'
+    else:
+        msg = '登陆超时，请重新登陆'
+    data = {
+        'status': status,
+        'msg': msg,
+    }
+    return HttpResponse(json.dumps(data), content_type="application/json")
+
+
 # 企业提交职位信息
 @csrf_exempt
 def subEntJobInfo(request):
@@ -128,7 +191,7 @@ def subEntJobInfo(request):
                 else:
                     msg = '保存失败'
             except ent_jobs.DoesNotExist:
-                msg = '简历信息不存在'
+                msg = '职位信息不存在'
         else:
             saveNewJobInfoId = str(uuid.uuid1())
             saveNewJobInfo = ent_jobs(jobid=saveNewJobInfoId, entid_id=message['entid'], jobName=m['jobName'], jobDepart=m['jobDepart'], jobClass=m['jobClass'], jobType=m['jobType'], jobPay=m[
