@@ -9,4 +9,5 @@ urlpatterns = [
     path('subEntBaseInfo', views_ent.subEntBaseInfo),
     path('subEntJobInfo', views_ent.subEntJobInfo),
     path('updateEntBaseInfo', views_ent.updateEntBaseInfo),
+    path('delEntJobInfo', views_ent.delEntJobInfo),
 ]

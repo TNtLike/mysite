@@ -184,7 +184,7 @@ def subEntJobInfo(request):
         if key != '0000':
             try:
                 updateEntJobInfo = ent_jobs.objects.filter(
-                    jobid=key).update(jobName=m['jobName'], jobDepart=m['jobDepart'], jobClass=m['jobClass'], jobType=m['jobType'], jobPay=m['jobPay'], jobLocation=m['jobLocation'], jobAddress=m['jobAddress'], workExp=m['workExp'], degree=m['degree'], jobReq=m['jobReq'], email=m['email'], updateTime=datetime.date.today())
+                    jobid=key).update(jobName=m['jobName'], jobDepart=m['jobDepart'], jobClass=m['jobClass'], jobType=m['jobType'], jobPay=m['jobPay'],  jobAddress=m['jobAddress'], workExp=m['workExp'], degree=m['degree'], jobReq=m['jobReq'], email=m['email'], updateTime=datetime.date.today())
                 if updateEntJobInfo:
                     status = 'ok'
                     msg = '保存成功'
@@ -195,7 +195,7 @@ def subEntJobInfo(request):
         else:
             saveNewJobInfoId = str(uuid.uuid1())
             saveNewJobInfo = ent_jobs(jobid=saveNewJobInfoId, entid_id=message['entid'], jobName=m['jobName'], jobDepart=m['jobDepart'], jobClass=m['jobClass'], jobType=m['jobType'], jobPay=m[
-                                      'jobPay'], jobLocation=m['jobLocation'], jobAddress=m['jobAddress'], workExp=m['workExp'], degree=m['degree'], jobReq=m['jobReq'], email=m['email'], updateTime=datetime.date.today())
+                                      'jobPay'], jobAddress=m['jobAddress'], workExp=m['workExp'], degree=m['degree'], jobReq=m['jobReq'], email=m['email'], updateTime=datetime.date.today())
             if saveNewJobInfo.save():
                 msg = '添加失败'
             else:
@@ -203,6 +203,30 @@ def subEntJobInfo(request):
                 msg = '添加成功'
     else:
         msg = '登陆超时，请重新登陆'
+    data = {
+        'status': status,
+        'msg': msg,
+    }
+    return HttpResponse(json.dumps(data), content_type="application/json")
+
+
+# 删除项目信息
+@csrf_exempt
+def delEntJobInfo(request):
+    message = json.loads(request.body)
+    status = 'error'
+    msg = ''
+    if request.session.get('entid'):
+        try:
+            m = ent_jobs.objects.get(
+                jobid=message['msg'])
+            m.delete()
+            status = 'ok'
+            msg = '删除成功'
+        except ent_jobs.DoesNotExist:
+            msg = '删除失败'
+    else:
+        msg = '登陆超时'
     data = {
         'status': status,
         'msg': msg,

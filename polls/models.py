@@ -103,7 +103,6 @@ class ent_jobs(models.Model):
         'ent', on_delete=models.CASCADE)
     jobid = models.CharField(max_length=64, primary_key=True)
     jobName = models.CharField(max_length=20)
-    jobLocation = models.CharField(max_length=30)
     jobAddress = models.CharField(max_length=50)
     jobPay = models.CharField(max_length=30)
     jobType = models.CharField(max_length=10)
