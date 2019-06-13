@@ -25,4 +25,6 @@ urlpatterns = [
     path('apis/psn/', include('polls.urls_psn')),
     # ent接口
     path('apis/ent/', include('polls.urls_ent')),
+    # 将打包完成的vue项目配置为当前服务器首页
+    path('', views.returnIndex)
 ]

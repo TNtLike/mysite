@@ -64,8 +64,10 @@ ROOT_URLCONF = 'mysite.urls'
 
 TEMPLATES = [
     {
+        # 配置前端文件目录
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR+"/templates", ],  # 修改前为空
+        # 'DIRS': [BASE_DIR+"/templates", ],  # 修改前为空
+        'DIRS': [os.path.join(BASE_DIR, 'frontend')],  # 修改前为空
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -137,22 +139,17 @@ USE_L10N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.1/howto/static-files/
+# STATIC_URL = '/static/'
+# STATICFILES_DIRS = (
+#     os.path.join(BASE_DIR, ""),
+# )
+
 
 STATIC_URL = '/static/'
-# # Add for vuejs
-# STATICFILES_DIRS = [
-#     os.path.join(BASE_DIR, "templates/"),
-# ]
-HERE = os.path.dirname(os.path.abspath(__file__))
-HERE = os.path.join(HERE, '../')
-STATICFILES_DIRS = (
-    # Put strings here, like "/home/html/static" or "C:/www/django/static".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
-    os.path.join(HERE, 'static/'),
-)
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "frontend"),
+]
 
 # send e-mail
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'  # email后端

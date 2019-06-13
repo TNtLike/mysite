@@ -23,20 +23,23 @@ from .models import psn_resume_edu_exprience
 @csrf_exempt
 def psnSubmitUser(request):
     message = json.loads(request.body)
-    try:
-        if psn.objects.get(username=message['username']):
-            status = 'error'
-            msg = '用户名已存在，请更换'
-        elif psn.objects.get(email=message['email']):
-            status = 'error'
-            msg = '邮箱已被注册，请更换'
-        elif psn.objects.get(tel=message['tel']):
-            status = 'error'
-            msg = '邮箱已被注册，请更换'
-    except psn.DoesNotExist:
+    # if psn.objects.get(username=message['username']) or psn.objects.get(email=message['email']) or psn.objects.get(tel=message['tel']):
+
+    if psn.objects.filter(username=message['username']):
+        status = 'error'
+        msg = '用户名已存在，请更换'
+    elif psn.objects.filter(email=message['email']):
+        status = 'error'
+        msg = '邮箱已被注册，请更换'
+    elif psn.objects.filter(tel=message['tel']):
+        status = 'error'
+        msg = '手机已被注册，请更换'
+    else:
         saveNewPsnId = str(uuid.uuid1())
+        # saveNewPsn = psn(psnid=saveNewPsnId, username=message['username'], password=message['password'],
+        #                  question=message['question'], answer=message['answer'], email=message['email'], tel=message['tel'])
         saveNewPsn = psn(psnid=saveNewPsnId, username=message['username'], password=message['password'],
-                         question=message['question'], answer=message['answer'], email=message['email'], tel=message['tel'])
+                         email=message['email'], tel=message['tel'])
         if saveNewPsn.save():
             status = 'error'
             msg = '注册失败'
@@ -89,8 +92,8 @@ def getPsnResumeInfo(request):
     }
     if request.session.get('psnid'):
         try:
-            resumeid = psn_resume.objects.get(
-                psnid_id=message['psnid']).resumeid
+            resumeid = psn_resume.objects.filter(
+                psnid_id=message['psnid'])[0].resumeid
             status = 'ok'
             data['psnBaseInfo'] = serializers.serialize(
                 'json', psn_resume.objects.order_by(
@@ -129,7 +132,7 @@ def subPsnBaseInfo(request):
         m = message['msg']
         try:
             updatePsnBaseInfo = psn_resume.objects.filter(
-                psnid_id=message['psnid']).update(name=m['name'], age=m['age'], sex=m['sex'], location=m['location'], workExp=m['workExp'], jobName=m['jobName'], jobPay=m['jobPay'], jobType=m['jobType'], jobAdd=m['jobAdd'], tel=m['tel'], email=m['email'], nowStatus=m['nowStatus'], selfDisp=m['selfDisp'], updateTime=datetime.date.today())
+                psnid_id=message['psnid']).update(name=m['name'], age=m['age'], sex=m['sex'], location=m['location'], workExp=m['workExp'], jobName=m['jobName'], jobPay=m['jobPay'], jobType=m['jobType'], jobAdd=m['jobAdd'], tel=m['tel'], email=m['email'], nowStatus=m['nowStatus'], selfDisp=m['selfDisp'], psnTag=m['psnTag'], degree=m['degree'], updateTime=datetime.date.today())
             if updatePsnBaseInfo:
                 status = 'ok'
                 msg = '保存成功'
@@ -156,8 +159,8 @@ def subPsnProjectInfo(request):
     if request.session.get('psnid'):
         m = message['msg']
         key = message['key']
-        resumeid = psn_resume.objects.get(
-            psnid_id=message['psnid']).resumeid
+        resumeid = psn_resume.objects.filter(
+            psnid_id=message['psnid'])[0].resumeid
         if key != '0000':
             try:
                 updatePsnProjectInfo = psn_resume_project_exprience.objects.filter(
@@ -228,8 +231,8 @@ def subPsnWorkInfo(request):
     if request.session.get('psnid'):
         m = message['msg']
         key = message['key']
-        resumeid = psn_resume.objects.get(
-            psnid_id=message['psnid']).resumeid
+        resumeid = psn_resume.objects.filter(
+            psnid_id=message['psnid'])[0].resumeid
         if key != '0000':
             try:
                 updatePsnWorkInfo = psn_resume_work_exprience.objects.filter(
@@ -300,8 +303,8 @@ def subPsnEduInfo(request):
     if request.session.get('psnid'):
         m = message['msg']
         key = message['key']
-        resumeid = psn_resume.objects.get(
-            psnid_id=message['psnid']).resumeid
+        resumeid = psn_resume.objects.filter(
+            psnid_id=message['psnid'])[0].resumeid
         if key != '0000':
             try:
                 updatePsnEduInfo = psn_resume_edu_exprience.objects.filter(

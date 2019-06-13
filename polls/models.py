@@ -7,8 +7,8 @@ class psn(models.Model):
     psnid = models.CharField(max_length=64, primary_key=True)
     username = models.CharField(max_length=20)
     password = models.CharField(max_length=20)
-    question = models.CharField(max_length=20)
-    answer = models.CharField(max_length=20)
+    # question = models.CharField(max_length=20)
+    # answer = models.CharField(max_length=20)
     email = models.CharField(max_length=30)
     tel = models.CharField(max_length=15)
 
@@ -29,8 +29,10 @@ class psn_resume(models.Model):
     jobPay = models.CharField(max_length=12)
     nowStatus = models.CharField(max_length=2, default='0')
     updateTime = models.DateField(auto_now=True)
-    workExp = models.CharField(max_length=15, default='应届毕业生')
+    workExp = models.CharField(max_length=15, default='应届')
     selfDisp = models.TextField(default='请输入一段自我描述')
+    psnTag = models.TextField(default='个人能力,执行力')
+    degree = models.CharField(max_length=10)
 
 
 class psn_resume_project_exprience(models.Model):
@@ -70,17 +72,32 @@ class psn_resume_edu_exprience(models.Model):
 class send_job(models.Model):
     resumeid = models.ForeignKey(
         'psn_resume', on_delete=models.CASCADE)
+    psnid = models.ForeignKey(
+        'psn', on_delete=models.CASCADE)
+    entid = models.ForeignKey(
+        'ent', on_delete=models.CASCADE)
     jobid = models.ForeignKey(
         'ent_jobs', on_delete=models.CASCADE)
+    entName = models.CharField(max_length=50)
+    jobName = models.CharField(max_length=20)
+    status = models.CharField(max_length=10, default='已送达')
     sendTime = models.DateField(auto_now=True)
+    wantJobName = models.CharField(max_length=20)
+    wantJobPay = models.CharField(max_length=12)
+    wantJobAdd = models.CharField(max_length=20)
+    name = models.CharField(max_length=20)
+    psnemail = models.CharField(max_length=30)
+    psntel = models.CharField(max_length=15)
+    entemail = models.CharField(max_length=30)
+    enttel = models.CharField(max_length=15)
 
 
 class ent(models.Model):
     entid = models.CharField(max_length=64, primary_key=True)
     username = models.CharField(max_length=20)
     password = models.CharField(max_length=20)
-    question = models.CharField(max_length=20)
-    answer = models.CharField(max_length=20)
+    # question = models.CharField(max_length=20)
+    # answer = models.CharField(max_length=20)
     tel = models.CharField(max_length=15)
     email = models.CharField(max_length=30)
 
@@ -89,27 +106,29 @@ class ent_baseInfo(models.Model):
     entid = models.ForeignKey(
         'ent', on_delete=models.CASCADE)
     entAddress = models.CharField(max_length=20)
-    entName = models.CharField(max_length=20)
+    entName = models.CharField(max_length=50)
     entContectName = models.CharField(max_length=20, default='HR')
     entCertId = models.CharField(max_length=20)
     entClass = models.CharField(max_length=20, default='私营企业')
     entScale = models.CharField(max_length=20, default='1-49人')
     entSummary = models.TextField()
-    entTag = models.TextField()
+    entTag = models.TextField(default='五险一金')
 
 
 class ent_jobs(models.Model):
     entid = models.ForeignKey(
         'ent', on_delete=models.CASCADE)
+    entName = models.CharField(max_length=50)
+    entTag = models.TextField()
     jobid = models.CharField(max_length=64, primary_key=True)
     jobName = models.CharField(max_length=20)
     jobAddress = models.CharField(max_length=50)
-    jobPay = models.CharField(max_length=30)
-    jobType = models.CharField(max_length=10)
+    jobPay = models.CharField(max_length=30, default='面议')
+    jobType = models.CharField(max_length=10, default='全职')
     jobClass = models.CharField(max_length=50)
     jobDepart = models.CharField(max_length=30)
     email = models.CharField(max_length=30)
-    degree = models.CharField(max_length=10)
+    degree = models.CharField(max_length=10, default='不限')
     workExp = models.CharField(max_length=15, default='不限')
     jobReq = models.TextField()
     updateTime = models.DateField(auto_now=True)
