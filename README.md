@@ -1,10 +1,6 @@
 # mysite
 
-## 前端部分在myblogs中
-
-## models.tobjects.filter()返回QuerySet对象，from django.core import serializers ，使用serializers.serialize('json',QuerySet)
-
->* 跨域，可使用Django的第三方包 django-cors-headers
+>*  django-cors-headers
 
 安装:
 
