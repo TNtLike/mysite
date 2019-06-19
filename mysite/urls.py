@@ -1,7 +1,7 @@
 """mysite URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/2.1/topics/http/urls/
+    https://docs.djangoproject.com/en/2.2/topics/http/urls/
 Examples:
 Function views
     1. Add an import:  from my_app import views
@@ -14,17 +14,8 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import include, path
-from polls import views
+from django.urls import path
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # 接口url
-    path('apis/', include('polls.urls')),
-    # psn接口
-    path('apis/psn/', include('polls.urls_psn')),
-    # ent接口
-    path('apis/ent/', include('polls.urls_ent')),
-    # 将打包完成的vue项目配置为当前服务器首页
-    path('', views.returnIndex)
 ]
