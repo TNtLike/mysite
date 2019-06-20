@@ -15,7 +15,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.conf.urls import include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    # 接口url
+    path('apis/', include('polls.urls')),
+    # psn接口
+    path('apis/psn/', include('polls.urls_psn')),
+    # ent接口
+    path('apis/ent/', include('polls.urls_ent')),
 ]
