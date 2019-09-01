@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'polls',
-    
+
 ]
 
 MIDDLEWARE = [
@@ -77,11 +77,12 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',
-        'USER': 'postgres',
-        'HOST': 'db',
-        'PORT': 5432,
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'djangotest',
+        'USER': 'root',
+        'PASSWORD': '123456789',
+        'HOST': 'localhost',
+        'PORT': 3306,
     }
 }
 

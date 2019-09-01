@@ -18,6 +18,7 @@ from django.urls import path
 from django.conf.urls import include
 
 urlpatterns = [
+    # path('', admin.site.urls),
     path('admin/', admin.site.urls),
     # 接口url
     path('apis/', include('polls.urls')),
