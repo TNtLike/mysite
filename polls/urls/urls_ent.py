@@ -1,6 +1,6 @@
 
 from django.urls import include, path
-from . import views_ent
+from ..views import views_ent
 # ../apis/ent+  接口
 urlpatterns = [
     path('entSubmitUser', views_ent.entSubmitUser),

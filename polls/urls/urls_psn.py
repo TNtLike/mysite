@@ -1,6 +1,6 @@
 
 from django.urls import include, path
-from . import views_psn
+from ..views import views_psn
 # ../apis/+  接口
 urlpatterns = [
     path('psnSubmitUser', views_psn.psnSubmitUser),

@@ -21,9 +21,9 @@ urlpatterns = [
     # path('', admin.site.urls),
     path('admin/', admin.site.urls),
     # 接口url
-    path('apis/', include('polls.urls')),
+    path('apis/', include('polls.urls.urls')),
     # psn接口
-    path('apis/psn/', include('polls.urls_psn')),
+    path('apis/psn/', include('polls.urls.urls_psn')),
     # ent接口
-    path('apis/ent/', include('polls.urls_ent')),
+    path('apis/ent/', include('polls.urls.urls_ent')),
 ]
