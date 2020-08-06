@@ -4,14 +4,11 @@ from django.views.decorators.csrf import csrf_exempt
 
 import datetime
 import json
-# 生成id
 import uuid
 from django.core import serializers
 
-# email
 from django.core.mail import EmailMessage
 
-# model
 from .models import ent
 from .models import ent_jobs
 from .models import ent_baseInfo
